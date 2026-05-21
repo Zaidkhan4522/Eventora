@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedding Photographers — Eventora</title>
+  <!-- Font Awesome & Google Fonts (same as index) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ------------------------------------------------------
+       COMPLETE RESTYLE TO MATCH INDEX – PURPLE/PINK THEME
+       + VERTICAL NAV SLIDER (copied from index)
+    ------------------------------------------------------- */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #6D28D9;
+      color: white;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.nav-open {
+      overflow: hidden;
+    }
+
+    /* ---------- FIXED BACKGROUND (purple/pink overlay) ---------- */
+    .fixed-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -2;
+      background:
+        linear-gradient(rgba(109, 40, 217, 0.7), rgba(244, 63, 94, 0.8)),
+        url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+      background-attachment: fixed;
+    }
+
+    /* soft overlay for depth */
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(109, 40, 217, 0.2);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+
+    /* ---------- VERTICAL NAVBAR (updated colors) ---------- */
+    .vertical-nav {
+      position: fixed;
+      left: -280px;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(250, 232, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 5px 0 30px rgba(109, 40, 217, 0.2);
+      z-index: 1000;
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      padding: 30px 0;
+    }
+
+    .vertical-nav.active {
+      left: 0;
+    }
+
+    .nav-toggle {
+      position: fixed;
+      left: 30px;
+      top: 30px;
+      z-index: 1001;
+      background: #F43F5E;
+      color: white;
+      border: none;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(244, 63, 94, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-toggle:hover {
+      background: #F9A8D4;
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(244, 63, 94, 0.5);
+    }
+
+    .nav-logo {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 0 20px;
+    }
+
+    .nav-logo a {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #F43F5E;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo i {
+      margin-right: 12px;
+      font-size: 28px;
+    }
+
+    /* Top Auth Buttons in Navbar (fixed to right corner) */
+    .nav-top-auth {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: auto !important;
+      height: auto !important;
+      padding: 0 !important;
+    }
+
+    .nav-top-auth-btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-top-auth-btn.login {
+      background: #F43F5E;
+      color: white;
+    }
+
+    .nav-top-auth-btn.login:hover {
+      background: #F9A8D4;
+    }
+
+    .nav-top-auth-btn.signup {
+      background: white;
+      color: #6D28D9;
+    }
+
+    .nav-top-auth-btn.signup:hover {
+      background: #F9A8D4;
+    }
+
+    .nav-top-auth-btn.logout {
+      background: #6D28D9;
+      color: white;
+      display: none;
+    }
+
+    .nav-top-auth-btn.logout:hover {
+      background: #F43F5E;
+    }
+
+    /* User info display when logged in (nav top) */
+    .nav-top-user-info {
+      display: none;
+      align-items: center;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      background: rgba(244, 63, 94, 0.1);
+      border-radius: 10px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .nav-top-user-info i {
+      font-size: 20px;
+      color: #F43F5E;
+      margin-right: 12px;
+    }
+
+    .nav-top-user-details {
+      flex: 1;
+    }
+
+    .nav-top-user-name {
+      font-weight: 600;
+      color: #6D28D9;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .nav-top-user-email {
+      font-weight: 400;
+      color: #6D28D9;
+      font-size: 12px;
+    }
+
+    .vertical-nav-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .vertical-nav-links li {
+      margin-bottom: 8px;
+      padding: 0 15px;
+    }
+
+    .vertical-nav-links a {
+      display: flex;
+      align-items: center;
+      padding: 18px 20px;
+      text-decoration: none;
+      color: #6D28D9;
+      font-weight: 500;
+      font-size: 16px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vertical-nav-links a i {
+      margin-right: 15px;
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .vertical-nav-links a:hover {
+      background: rgba(244, 63, 94, 0.15);
+      color: #F43F5E;
+      transform: translateX(8px);
+    }
+
+    .vertical-nav-links a.active {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(244, 63, 94, 0.1));
+      color: #F43F5E;
+      font-weight: 600;
+    }
+
+    .vertical-nav-links a.active:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: #F43F5E;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Auth Section at bottom of Navbar */
+    .nav-auth {
+      padding: 30px 20px 20px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(109, 40, 217, 0.1);
+    }
+
+    .user-info {
+      display: none;
+      align-items: center;
+      margin-bottom: 25px;
+      padding: 20px;
+      background: rgba(244, 63, 94, 0.1);
+      border-radius: 12px;
+    }
+
+    .user-info i {
+      font-size: 24px;
+      color: #F43F5E;
+      margin-right: 15px;
+    }
+
+    .user-details {
+      flex: 1;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: #6D28D9;
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+
+    .user-email {
+      font-weight: 400;
+      color: #6D28D9;
+      font-size: 13px;
+    }
+
+    .nav-auth-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .nav-auth-btn {
+      padding: 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-auth-btn i {
+      margin-right: 12px;
+    }
+
+    .nav-auth-btn.primary {
+      background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+      color: white;
+    }
+
+    .nav-auth-btn.primary:hover {
+      background: linear-gradient(135deg, #F9A8D4, #F43F5E);
+      transform: translateY(-3px);
+    }
+
+    .nav-auth-btn.secondary {
+      background: rgba(255, 255, 255, 0.9);
+      color: #6D28D9;
+      border: 1px solid rgba(109, 40, 217, 0.1);
+    }
+
+    .nav-auth-btn.secondary:hover {
+      background: white;
+      transform: translateY(-3px);
+    }
+
+    .nav-auth-btn.danger {
+      background: rgba(109, 40, 217, 0.1);
+      color: #6D28D9;
+      display: none;
+    }
+
+    /* Overlay when nav is open on mobile */
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(109, 40, 217, 0.7);
+      z-index: 999;
+      backdrop-filter: blur(5px);
+    }
+
+    .nav-overlay.active {
+      display: block;
+    }
+
+    /* ---------- MAIN CONTENT WRAPPER (shift when nav open) ---------- */
+    .content-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 30px 80px;
+      position: relative;
+      z-index: 5;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.nav-open .content-wrapper {
+      transform: translateX(280px);
+    }
+
+    @media (max-width: 768px) {
+      body.nav-open .content-wrapper {
+        transform: translateX(0);
+      }
+    }
+
+    /* ---------- TYPOGRAPHY –– PINK, PLAYFAIR ---------- */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.8rem;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 12px rgba(109, 40, 217, 0.6);
+      animation: fadeInDown 0.9s ease;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      font-size: 1.3rem;
+      color: rgba(250, 232, 255, 0.9);
+      margin-bottom: 50px;
+      font-weight: 300;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      border-bottom: 1px solid rgba(244, 63, 94, 0.5);
+      padding-bottom: 20px;
+      animation: fadeInDown 0.9s 0.1s both;
+    }
+
+    @keyframes fadeInDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-25px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ---------- FILTER SECTION –– ELEGANT GLASS CARD ---------- */
+    .filter-container {
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 60px;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+      box-shadow: 0 20px 40px rgba(109, 40, 217, 0.3);
+      animation: fadeIn 1s 0.2s both;
+    }
+
+    .filter-container input,
+    .filter-container select {
+      background: rgba(109, 40, 217, 0.7);
+      border: 1px solid rgba(244, 63, 94, 0.5);
+      border-radius: 50px;
+      padding: 16px 26px;
+      font-size: 1rem;
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      outline: none;
+      transition: all 0.3s ease;
+      width: 280px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='white'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+      background-size: 18px;
+    }
+
+    .filter-container input::placeholder {
+      color: rgba(250, 232, 255, 0.6);
+      font-weight: 300;
+    }
+
+    .filter-container input:focus,
+    .filter-container select:focus {
+      border-color: #F43F5E;
+      box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.2);
+      background: rgba(109, 40, 217, 0.9);
+    }
+
+    .filter-container select option {
+      background: #6D28D9;
+      color: white;
+    }
+
+    /* ---------- PHOTOGRAPHER CARDS –– LUXURY GLASS ---------- */
+    .photographer-list {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .listing {
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 25px 45px -10px rgba(109, 40, 217, 0.4);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: cardAppear 0.7s ease;
+    }
+
+    @keyframes cardAppear {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .listing:hover {
+      transform: translateY(-10px) scale(1.01);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(244, 63, 94, 0.5);
+      box-shadow: 0 35px 60px -10px rgba(244, 63, 94, 0.25);
+    }
+
+    /* ---------- HEXAGON (pink trim) ---------- */
+    .hex {
+      width: 150px;
+      height: 170px;
+      clip-path: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+      overflow: hidden;
+      background: rgba(244, 63, 94, 0.2);
+      flex-shrink: 0;
+      border: 2px solid rgba(244, 63, 94, 0.5);
+      transition: all 0.4s ease;
+    }
+
+    .listing:hover .hex {
+      border-color: #F43F5E;
+      transform: rotate(2deg) scale(1.02);
+    }
+
+    .hex img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s ease;
+    }
+
+    .listing:hover .hex img {
+      transform: scale(1.2);
+    }
+
+    /* ---------- RIGHT CONTENT ---------- */
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .photographer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: white;
+      margin: 0 0 6px;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px rgba(109, 40, 217, 0.3);
+    }
+
+    .location {
+      color: rgba(250, 232, 255, 0.9);
+      font-size: 1rem;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .location i {
+      color: #F43F5E;
+      font-size: 1.1rem;
+    }
+
+    /* ---------- GALLERY STRIP ---------- */
+    .gallery {
+      display: flex;
+      gap: 15px;
+      margin: 10px 0 8px;
+    }
+
+    .gallery div {
+      flex: 1;
+      height: 115px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: 0.3s;
+    }
+
+    .gallery div:hover {
+      border-color: #F43F5E;
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+
+    .gallery div:hover img {
+      transform: scale(1.2);
+    }
+
+    /* ---------- META ---------- */
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      font-size: 0.95rem;
+      color: rgba(250, 232, 255, 0.9);
+      background: rgba(109, 40, 217, 0.25);
+      padding: 12px 18px;
+      border-radius: 40px;
+      margin-top: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    .price-block {
+      font-weight: 700;
+      color: #F43F5E;
+      background: rgba(244, 63, 94, 0.12);
+      padding: 4px 16px;
+      border-radius: 40px;
+      letter-spacing: 0.8px;
+    }
+
+    .desc {
+      font-size: 0.98rem;
+      color: rgba(250, 232, 255, 0.8);
+      line-height: 1.6;
+      max-width: 90%;
+      font-style: italic;
+    }
+
+    /* ---------- VIEW DETAILS BUTTON ---------- */
+    .view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(145deg, #F43F5E, #F9A8D4);
+      color: white;
+      padding: 12px 26px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      width: fit-content;
+      box-shadow: 0 8px 18px rgba(244, 63, 94, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .view-btn i {
+      font-size: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .view-btn:hover {
+      background: linear-gradient(145deg, #F9A8D4, #F43F5E);
+      transform: translateX(10px);
+      box-shadow: 0 12px 28px rgba(244, 63, 94, 0.45);
+    }
+
+    .view-btn:hover i {
+      transform: translateX(6px);
+    }
+
+    /* ---------- empty state ---------- */
+    .no-results {
+      text-align: center;
+      padding: 80px 20px;
+      background: rgba(109, 40, 217, 0.4);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      color: rgba(250, 232, 255, 0.8);
+      font-size: 1.5rem;
+      border: 1px dashed #F43F5E;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1000px) {
+      .listing {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .right {
+        align-items: center;
+      }
+
+      .gallery {
+        width: 100%;
+      }
+
+      .desc {
+        max-width: 100%;
+      }
+
+      .view-btn {
+        align-self: center;
+      }
+
+      h1 {
+        font-size: 3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .vertical-nav {
+        width: 100%;
+        left: -100%;
+      }
+
+      body.nav-open .vertical-nav {
+        left: 0;
+      }
+
+      .nav-toggle {
+        left: 20px;
+        top: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+      }
+
+      .nav-top-auth {
+        top: 15px;
+        right: 15px;
+      }
+
+      .nav-top-auth-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .content-wrapper {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .filter-container {
+        border-radius: 30px;
+        padding: 20px;
+      }
+
+      .filter-container input,
+      .filter-container select {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 576px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .page-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .hex {
+        width: 130px;
+        height: 150px;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #6D28D9;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #F43F5E;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- FIXED LUXURY BACKGROUND (purple/pink overlay) -->
+  <div class="fixed-bg"></div>
+  <div class="bg-overlay"></div>
+
+  <!-- VERTICAL NAVBAR (full slider) -->
+  <nav class="vertical-nav" id="verticalNav">
+    <div class="nav-logo">
+      <br><br><br>
+      <a href="index.html"><i class="fas fa-heart"></i>Eventora</a>
+    </div>
+
+    <!-- User info display when logged in (top of nav) -->
+    <div class="nav-top-user-info" id="navTopUserInfo">
+      <i class="fas fa-user-circle"></i>
+      <div class="nav-top-user-details">
+        <div class="nav-top-user-name" id="navTopUserName">Guest</div>
+        <div class="nav-top-user-email" id="navTopUserEmail">Not logged in</div>
+      </div>
+    </div>
+
+    <ul class="vertical-nav-links">
+      <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="Venues.html"><i class="fas fa-building"></i> Venues</a></li>
+      <li><a href="photographers.html" class="active"><i class="fas fa-camera"></i> Photographers</a></li>
+      <li><a href="Wedding Caterers.html"><i class="fas fa-utensils"></i> Caterers</a></li>
+      <li><a href="entertainment.html"><i class="fas fa-music"></i> Entertainment</a></li>
+    </ul>
+
+    <!-- Auth Section at bottom of Navbar -->
+    <div class="nav-auth">
+      <div class="user-info" id="userInfo">
+        <i class="fas fa-user-circle"></i>
+        <div class="user-details">
+          <div class="user-name" id="userName">Guest</div>
+          <div class="user-email" id="userEmailNav">Not logged in</div>
+        </div>
+      </div>
+      <div class="nav-auth-buttons">
+        <button id="navLoginBtn" class="nav-auth-btn primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button id="navSignupBtn" class="nav-auth-btn secondary"><i class="fas fa-user-plus"></i> Sign Up</button>
+        <button id="navLogoutBtn" class="nav-auth-btn danger" style="display: none;"><i class="fas fa-sign-out-alt"></i>
+          Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Nav Toggle Button -->
+  <button class="nav-toggle" id="navToggle">
+    <i class="fas fa-bars" id="navToggleIcon"></i>
+  </button>
+
+  <!-- Overlay for mobile -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- TOP RIGHT AUTH BUTTONS (fixed) -->
+  <div class="top-auth">
+
+      <!-- LOGIN BUTTON -->
+      <button id="topLoginBtn" class="login-btn">
+        Login
+      </button>
+
+      <!-- PROFILE SECTION -->
+      <div id="profileContainer">
+
+        <img id="userPhoto" src="" alt="Profile">
+
+        <button id="logoutBtn">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+    <img id="navUserPhoto" width="40" height="40" style="border-radius:50%;">
+
+    <span id="navUserName"></span>
+
+    <button id="logoutBtn">Logout</button>
+
+    </div>
+    </div>
+
+  <!-- MAIN CONTENT WRAPPER (will shift when nav opens) -->
+  <div class="content-wrapper">
+    <!-- PAGE HEADER -->
+    <h1>Wedding Photographers</h1>
+    <p class="page-subtitle">
+      <i class="fas fa-camera" style="color: #F43F5E; margin-right: 10px;"></i>
+      Explore and filter top wedding photographers by city or name
+    </p>
+
+    <!-- FILTERS – glass card -->
+    <div class="filter-container">
+      <input type="text" id="searchInput" placeholder="🔍 Search photographer name...">
+      <select id="placeFilter">
+        <option value="all">🌍 All Cities</option>
+      </select>
+    </div>
+
+    <!-- PHOTOGRAPHER LIST DYNAMIC -->
+    <div id="photographerList" class="photographer-list"></div>
+  </div>
+
+  <!-- subtle footer note -->
+  <div
+    style="text-align: center; margin-top: 30px; padding: 20px; color: rgba(250,232,255,0.4); font-size: 0.85rem; border-top: 1px solid rgba(244,63,94,0.2); max-width: 1400px; margin-left: auto; margin-right: auto;">
+    <i class="fas fa-heart" style="color: #F43F5E;"></i> Weddings begin here – Eventora
+  </div>
+
+  <script>
+    // ============================================
+    // NAVBAR SLIDER FUNCTIONALITY (copied from index)
+    // ============================================
+    const navToggle = document.getElementById('navToggle');
+    const verticalNav = document.getElementById('verticalNav');
+    const navToggleIcon = document.getElementById('navToggleIcon');
+    const navOverlay = document.getElementById('navOverlay');
+    const body = document.body;
+    const contentWrapper = document.querySelector('.content-wrapper');
+
+    // Toggle navbar
+    navToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      verticalNav.classList.toggle('active');
+      navOverlay.classList.toggle('active');
+      body.classList.toggle('nav-open');
+
+      // Change icon
+      if (verticalNav.classList.contains('active')) {
+        navToggleIcon.className = 'fas fa-times';
+      } else {
+        navToggleIcon.className = 'fas fa-bars';
+      }
+    });
+
+    // Close navbar when clicking overlay
+    navOverlay.addEventListener('click', function () {
+      verticalNav.classList.remove('active');
+      navOverlay.classList.remove('active');
+      body.classList.remove('nav-open');
+      navToggleIcon.className = 'fas fa-bars';
+    });
+
+    // Close navbar when clicking outside on desktop
+    document.addEventListener('click', function (event) {
+      const isMobile = window.innerWidth <= 768;
+      if (!isMobile &&
+        verticalNav.classList.contains('active') &&
+        !verticalNav.contains(event.target) &&
+        !navToggle.contains(event.target)) {
+        verticalNav.classList.remove('active');
+        navOverlay.classList.remove('active');
+        body.classList.remove('nav-open');
+        navToggleIcon.className = 'fas fa-bars';
+      }
+    });
+
+    // Close navbar with Escape key
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && verticalNav.classList.contains('active')) {
+        verticalNav.classList.remove('active');
+        navOverlay.classList.remove('active');
+        body.classList.remove('nav-open');
+        navToggleIcon.className = 'fas fa-bars';
+      }
+    });
+
+    // Close navbar when clicking a nav link (mobile)
+    document.querySelectorAll('.vertical-nav-links a').forEach(link => {
+      link.addEventListener('click', function () {
+        if (window.innerWidth <= 768) {
+          verticalNav.classList.remove('active');
+          navOverlay.classList.remove('active');
+          body.classList.remove('nav-open');
+          navToggleIcon.className = 'fas fa-bars';
+        }
+      });
+    });
+
+    // ============================================
+    // PHOTOGRAPHER DATA & RENDERING
+    // ============================================
+   const photographers = [
+  { 
+    name: "Rohit Sharma", place: "Mumbai", price: "₹50,000 / wedding",
+    desc: "Candid and traditional wedding photography.",
+    img1: "wedding-imgs/photographers/p1-img1.png",
+    img2: "wedding-imgs/photographers/p1-img2.png",
+    img3: "wedding-imgs/photographers/p1-img3.png"
+  },
+
+  { 
+    name: "Anita Desai", place: "Goa", price: "₹45,000 / wedding",
+    desc: "Beach weddings with vibrant and candid shots.",
+    img1: "wedding-imgs/photographers/p2-img1.png",
+    img2: "wedding-imgs/photographers/p2-img2.png",
+    img3: "wedding-imgs/photographers/p2-img3.png"
+  },
+
+  { 
+    name: "Vikram Singh", place: "Jaipur", price: "₹60,000 / wedding",
+    desc: "Heritage and royal wedding photography.",
+    img1: "wedding-imgs/photographers/p3-img1.png",
+    img2: "wedding-imgs/photographers/p3-img2.png",
+    img3: "wedding-imgs/photographers/p3-img3.png"
+  },
+
+  { 
+    name: "Meera Kapoor", place: "Pune", price: "₹40,000 / wedding",
+    desc: "Garden and outdoor wedding photography.",
+    img1: "wedding-imgs/photographers/p4-img1.png",
+    img2: "wedding-imgs/photographers/p4-img2.png",
+    img3: "wedding-imgs/photographers/p4-img3.png"
+  },
+
+  { 
+    name: "Arjun Verma", place: "Delhi", price: "₹55,000 / wedding",
+    desc: "Elegant indoor and banquet wedding photography.",
+    img1: "wedding-imgs/photographers/p5-img1.png",
+    img2: "wedding-imgs/photographers/p5-img2.png",
+    img3: "wedding-imgs/photographers/p5-img3.png"
+  },
+
+  { 
+    name: "Sana Khan", place: "Bangalore", price: "₹52,000 / wedding",
+    desc: "Luxury wedding photography with modern aesthetics.",
+    img1: "wedding-imgs/photographers/p6-img1.png",
+    img2: "wedding-imgs/photographers/p6-img2.png",
+    img3: "wedding-imgs/photographers/p6-img3.png"
+  },
+
+  { 
+    name: "Rahul Mehta", place: "Chennai", price: "₹48,000 / wedding",
+    desc: "Beach and coastal wedding photography.",
+    img1: "wedding-imgs/photographers/p7-img1.png",
+    img2: "wedding-imgs/photographers/p7-img2.png",
+    img3: "wedding-imgs/photographers/p7-img3.png"
+  },
+
+  { 
+    name: "Priya Sharma", place: "Kolkata", price: "₹50,000 / wedding",
+    desc: "Indoor and traditional wedding photography.",
+    img1: "wedding-imgs/photographers/p8-img1.png",
+    img2: "wedding-imgs/photographers/p8-img2.png",
+    img3: "wedding-imgs/photographers/p8-img3.png"
+  },
+
+  { 
+    name: "Aditya Reddy", place: "Hyderabad", price: "₹53,000 / wedding",
+    desc: "Palace and heritage wedding photography.",
+    img1: "wedding-imgs/photographers/p9-img1.png",
+    img2: "wedding-imgs/photographers/p9-img2.png",
+    img3: "wedding-imgs/photographers/p9-img3.png"
+  },
+
+  { 
+    name: "Neha Gupta", place: "Ahmedabad", price: "₹42,000 / wedding",
+    desc: "Open garden and luxury photography.",
+    img1: "wedding-imgs/photographers/p10-img1.png",
+    img2: "wedding-imgs/photographers/p10-img2.png",
+    img3: "wedding-imgs/photographers/p10-img3.png"
+  }
+];
+
+    const placeFilter = document.getElementById("placeFilter");
+    const searchInput = document.getElementById("searchInput");
+    const photographerList = document.getElementById("photographerList");
+
+    // populate city dropdown
+    const cities = [...new Set(photographers.map(p => p.place))].sort();
+    cities.forEach(city => {
+      const option = document.createElement("option");
+      option.value = city;
+      option.textContent = city;
+      placeFilter.appendChild(option);
+    });
+
+    function slugify(name) {
+      return name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+    }
+
+    function renderPhotographers() {
+      photographerList.innerHTML = "";
+      const searchText = searchInput.value.toLowerCase();
+      const selectedPlace = placeFilter.value;
+
+      const filtered = photographers.filter(p => {
+        const matchesPlace = selectedPlace === "all" || p.place === selectedPlace;
+        const matchesName = p.name.toLowerCase().includes(searchText);
+        return matchesPlace && matchesName;
+      });
+
+      if (filtered.length === 0) {
+        photographerList.innerHTML = `<div class="no-results"><i class="fas fa-camera-retro" style="color: #F43F5E; margin-right: 10px;"></i> No photographers found. Try another search.</div>`;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const slug = slugify(p.name);
+        const card = document.createElement("div");
+        card.className = "listing";
+        card.innerHTML = `
+          <div class="hex">
+            <img src="${p.img1}?auto=format&fit=crop&w=800&q=60" alt="${p.name}">
+          </div>
+          <div class="right">
+            <h3 class="photographer-name">${p.name}</h3>
+            <div class="location">
+              <i class="fa-solid fa-location-dot"></i> ${p.place}
+            </div>
+            <div class="gallery">
+              <div><img src="${p.img1}?auto=format&fit=crop&w=800&q=60" alt="photo 1"></div>
+              <div><img src="${p.img2}?auto=format&fit=crop&w=800&q=60" alt="photo 2"></div>
+              <div><img src="${p.img3}?auto=format&fit=crop&w=800&q=60" alt="photo 3"></div>
+            </div>
+            <div class="meta">
+              <div class="price-block"><i class="fas fa-tag" style="margin-right: 6px;"></i> ${p.price}</div>
+              <div><i class="fas fa-calendar-alt" style="color: #F43F5E; margin-right: 6px;"></i> Experience: 5–15 years</div>
+              <div><i class="fas fa-sun" style="color: #F43F5E; margin-right: 6px;"></i> Available: All seasons</div>
+            </div>
+            <p class="desc">“${p.desc}”</p>
+            <a href="photographer-details.html?photographer=${slug}" class="view-btn">
+              <i class="fas fa-eye"></i> View Details
+              <i class="fas fa-arrow-right" style="margin-left: 6px;"></i>
+            </a>
+          </div>
+        `;
+        photographerList.appendChild(card);
+      });
+    }
+
+    renderPhotographers();
+    searchInput.addEventListener("input", renderPhotographers);
+    placeFilter.addEventListener("change", renderPhotographers);
+  </script>
+</body>
+
+</html>

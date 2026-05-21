@@ -1,0 +1,631 @@
+< !DOCTYPE html>
+  <html lang=" en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eventora – Find Your Dream Event Team</title>
+    <meta name="description"
+      content="Eventora – Discover premium event vendors for weddings, birthdays, college fests, and parties." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ===================== PAGE LOADER ===================== -->
+    <div id="page-loader">
+      <div class="loader-logo">EVENTORA</div>
+      <div class="loader-bar-wrap">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+    <!-- ===================== PARTICLE CANVAS ===================== -->
+    <canvas id="particle-canvas"></canvas>
+    <!-- ===================== BG GRADIENT LAYER ===================== -->
+    <div class="bg-layer bg-gradient"></div>
+    <!-- ===================== NAV OVERLAY ===================== -->
+    <div class="nav-overlay" id="navOverlay"></div>
+    <!-- ===================== SIDE NAV ===================== -->
+    <nav class="side-nav" id="sideNav">
+      <div class="side-nav-logo">
+        <a href="index.html"><i class="fas fa-heart"></i>Eventora</a>
+      </div>
+      <ul class="side-nav-links">
+        <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="#services"><i></i> Services</a></li>
+        <li><a href="#contact"><i></i> Contact</a></li>
+        <li><a href="Wedding Caterers.html"><i></i> Caterers</a></li>
+        <li><a href="gallery.html"><i></i> Gallery</a></li>
+        <li><a href="profile.html"><i></i> Profile</a></li>
+      </ul>
+      <div class="side-nav-auth">
+        <div class="side-nav-user" id="sideNavUser">
+          <i class="fas fa-user-circle"></i>
+          <div>
+            <div class="side-nav-user-name" id="sideNavName">User</div>
+            <div class="side-nav-user-email" id="sideNavEmail">email</div>
+          </div>
+        </div>
+        <button id="sNavLoginBtn" class="snav-btn primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button id="sNavSignupBtn" class="snav-btn secondary"><i class="fas fa-user-plus"></i> Sign Up</button>
+        <button id="sNavLogoutBtn" class="snav-btn danger" style="display:none"><i class="fas fa-sign-out-alt"></i>
+          Logout</button>
+      </div>
+    </nav>
+    <!-- ===================== NAV TOGGLE BUTTON ===================== -->
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="fas fa-bars" id="navToggleIcon"></i>
+    </button>
+    <!-- ===================== TOP AUTH (top-right) ===================== -->
+    <div class="top-auth">
+
+      <!-- LOGIN BUTTON -->
+      <button id="topLoginBtn" class="login-btn">
+        Login
+      </button>
+
+      <!-- PROFILE SECTION -->
+      <div id="profileContainer">
+
+        <img id="userPhoto" src="" alt="Profile">
+
+        <button id="logoutBtn">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+    <img id="navUserPhoto" width="40" height="40" style="border-radius:50%;">
+
+    <span id="navUserName"></span>
+
+    <button id="logoutBtn">Logout</button>
+
+    </div>
+    </div>
+    <!-- ===================== STICKY TOP NAVBAR (desktop) ===================== -->
+    <nav class="top-navbar" id="topNavbar">
+      <div class="top-navbar-inner">
+        <a href="index.html">Home</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact us</a>
+        <a href="gallery.html">Our gallery</a>
+        <a href="profile.html">Your Profile</a>
+      </div>
+    </nav>
+    <!-- ===================== SITE WRAPPER ===================== -->
+    <div class="site-wrap">
+      <!--  HERO  -->
+      <section class="hero" id="home">
+        <div class="hero-ring"></div>
+        <div class="hero-ring"></div>
+        <div class="hero-ring"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-badge"><i class="fas fa-circle"></i> India's Premier Event Platform</div>
+        <div class="hero-brand">EVENTORA</div>
+        <h2 class="hero-headline">
+          <span id="tw-text"></span><span class="typewriter-cursor"></span>
+        </h2>
+        <p class="hero-sub">Discover the finest event vendors, plan effortlessly, and create memories that last a
+          lifetime. Your perfect celebration starts here.</p>
+        <div class="hero-cta-row">
+          <a href="gallery.html" class="btn-primary">GALLERY <i class="fas fa-arrow-right"></i></a>
+
+        </div>
+        <div class="scroll-indicator">
+          <span>Scroll</span>
+          <div class="scroll-mouse"></div>
+        </div>
+      </section>
+      <!--  STATS  -->
+      <section class="stats-strip section-pad">
+        <div class="container">
+          <div class="sec-header reveal">
+            <div class="sec-tag">Our Numbers</div>
+            <h2 class="sec-title">Trusted by Thousands</h2>
+            <p class="sec-sub">Join the growing family of happy clients who found their dream event team with
+              Eventora.
+            </p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card reveal from-scale d1">
+              <span class="stat-icon"><i class="fas fa-heart"></i></span>
+              <span class="stat-num">10,000+</span>
+              <span class="stat-lbl">Happy Clients</span>
+            </div>
+            <div class="stat-card reveal from-scale d2">
+              <span class="stat-icon"><i class="fas fa-store"></i></span>
+              <span class="stat-num">500+</span>
+              <span class="stat-lbl">Verified Vendors</span>
+            </div>
+            <div class="stat-card reveal from-scale d3">
+              <span class="stat-icon"><i class="fas fa-map-marker-alt"></i></span>
+              <span class="stat-num">50+</span>
+              <span class="stat-lbl">Cities Covered</span>
+            </div>
+            <div class="stat-card reveal from-scale d4">
+              <span class="stat-icon"><i class="fas fa-star"></i></span>
+              <span class="stat-num">4.9</span>
+              <span class="stat-lbl">Average Rating</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--  HOW IT WORKS  -->
+      <section class="section-pad" id="how-it-works">
+        <div class="container">
+          <div class="sec-header reveal">
+            <div class="sec-tag">Simple Process</div>
+            <h2 class="sec-title">How It Works</h2>
+            <p class="sec-sub">From searching to celebrating — smooth and enjoyable in just four easy steps.</p>
+          </div>
+          <div class="hiw-grid">
+            <div class="hiw-card reveal d1">
+              <div class="hiw-num">1</div>
+              <span class="hiw-icon"><i class="fas fa-search"></i></span>
+              <h3>Search Vendors</h3>
+              <p>Browse hundreds of verified vendors across all categories — venues, photographers, caterers, and
+                more.
+              </p>
+            </div>
+            <div class="hiw-card reveal d2">
+              <div class="hiw-num">2</div>
+              <span class="hiw-icon"><i class="fas fa-balance-scale"></i></span>
+              <h3>Compare Services</h3>
+              <p>Review portfolios, read real client reviews, and compare packages to find the perfect fit for your
+                vision.</p>
+            </div>
+            <div class="hiw-card reveal d3">
+              <div class="hiw-num">3</div>
+              <span class="hiw-icon"><i class="fas fa-calendar-check"></i></span>
+              <h3>Book Easily</h3>
+              <p>Secure your dream vendors with a simple booking process. Get instant confirmation and peace of mind.
+              </p>
+            </div>
+            <div class="hiw-card reveal d4">
+              <div class="hiw-num">4</div>
+              <span class="hiw-icon"><i class="fas fa-glass-cheers"></i></span>
+              <h3>Enjoy Your Event</h3>
+              <p>Relax and enjoy your perfect celebration knowing every detail has been taken care of by the best.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--  SERVICES CARDS  -->
+      <section class="section-pad" id="services">
+        <div class="container">
+          <div class="sec-header reveal">
+            <div class="sec-tag">What We Offer</div>
+            <h2 class="sec-title">Our Event Services</h2>
+            <p class="sec-sub">From intimate celebrations to grand galas — we have the perfect experts for every
+              occasion.
+            </p>
+          </div>
+          <div class="services-grid">
+            <div class="srv-card reveal d1">
+              <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=900&q=80"
+                alt="Wedding" loading="lazy" />
+              <div class="srv-card-overlay"></div>
+              <div class="srv-card-body">
+                <span class="srv-badge">Top Rated</span>
+                <h3>Weddings</h3>
+                <p>Luxury wedding planning from decor to dining — tailored to your dream day.</p>
+                <a href="wedding.html" class="srv-link">Explore <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+            <div class="srv-card reveal d2">
+              <img src="images/college fest.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80'"
+                alt="College Fest" loading="lazy" />
+              <div class="srv-card-overlay"></div>
+              <div class="srv-card-body">
+                <span class="srv-badge">Campus Vibes</span>
+                <h3>School / College Fests</h3>
+                <p>High-energy campus celebrations with vibrant themes and flawless execution.</p>
+                <a href="clg-scl fest.html" class="srv-link">Explore <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+            <div class="srv-card reveal d3">
+              <img src="images/birthdays.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=80'"
+                alt="Birthdays" loading="lazy" />
+              <div class="srv-card-overlay"></div>
+              <div class="srv-card-body">
+                <span class="srv-badge">Personal Touch</span>
+                <h3>Birthdays</h3>
+                <p>Unforgettable birthday experiences — themed, elegant, and tailored just for you.</p>
+                <a href="birthdays.html" class="srv-link">Explore <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+            <div class="srv-card reveal d4">
+              <img src="images/common parties.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80'"
+                alt="Common Parties" loading="lazy" />
+              <div class="srv-card-overlay"></div>
+              <div class="srv-card-body">
+                <span class="srv-badge">Trending</span>
+                <h3>Common Parties</h3>
+                <p>Vibrant, lively parties planned to perfection for every life milestone.</p>
+                <a href="common-parties.html" class="srv-link">Explore <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+            <div class="srv-card reveal d5">
+              <img src="images/Veneu1.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80'"
+                alt="Venues" loading="lazy" />
+              <div class="srv-card-overlay"></div>
+              <div class="srv-card-body">
+                <span class="srv-badge">Premium</span>
+                <h3>Premium Venues</h3>
+                <p>Stunning spaces across 50+ cities — ballrooms, rooftops, gardens and more.</p>
+                <a href="Venues.html" class="srv-link">Explore <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+            <div class="srv-card reveal d6">
+              <img src="https://images.unsplash.com/photo-1501386761578-eaa54b4e9b0b?auto=format&fit=crop&w=900&q=80"
+                alt="Entertainment" loading="lazy" />
+              <div class="srv-card-overlay"></div>
+              <div class="srv-card-body">
+                <span class="srv-badge">Live &amp; Loud</span>
+                <h3>Entertainment</h3>
+                <p>Live bands, DJs, photo booths, and custom entertainment for every crowd.</p>
+                <a href="entertainment.html" class="srv-link">Explore <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--  FEATURED VENDOR ROWS  -->
+      <section class="fv-section" id="featured">
+        <div class="container">
+          <div class="sec-header reveal">
+            <div class="sec-tag">Premium Picks</div>
+            <h2 class="sec-title">Featured Vendors</h2>
+            <p class="sec-sub">Hand-picked, highly rated professionals to make your event truly extraordinary.</p>
+          </div>
+          <!-- Wedding -->
+          <div class="fv-row">
+            <div class="fv-img reveal from-left">
+              <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1200&q=80"
+                alt="Wedding" loading="lazy" />
+              <div class="fv-img-overlay"></div>
+              <span class="fv-img-badge">Top Rated</span>
+            </div>
+            <div class="fv-text reveal from-right">
+              <span class="fv-cat">Event Category</span>
+              <div class="fv-title">WEDDING</div>
+              <div class="fv-sub">Manage Your Wedding With Us</div>
+              <p class="fv-desc">Our wedding management team transforms your dream celebration into a perfectly
+                orchestrated experience. Meticulous planning, creative expertise, and flawless execution — every
+                moment
+                unfolds beautifully.</p>
+              <div class="fv-stats">
+                <div><span class="fv-stat-n">200+</span><span class="fv-stat-l">Weddings Done</span></div>
+                <div><span class="fv-stat-n">4.9★</span><span class="fv-stat-l">Avg. Rating</span></div>
+                <div><span class="fv-stat-n">100%</span><span class="fv-stat-l">Satisfaction</span></div>
+              </div>
+              <a href="wedding.html" class="fv-cta">View Wedding Services <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+          <!-- College Fests -->
+          <div class="fv-row img-right">
+            <div class="fv-text reveal from-left">
+              <span class="fv-cat">Event Category</span>
+              <div class="fv-title">SCHOOL / COLLEGE FESTS</div>
+              <div class="fv-sub">Events That Make Campus Life Unforgettable</div>
+              <p class="fv-desc">Vibrant and engaging school and college gatherings that bring students together.
+                Creative, high-energy experiences with seamless coordination and unforgettable campus memories.</p>
+              <div class="fv-stats">
+                <div><span class="fv-stat-n">500+</span><span class="fv-stat-l">Events Done</span></div>
+                <div><span class="fv-stat-n">50+</span><span class="fv-stat-l">Themes</span></div>
+                <div><span class="fv-stat-n">5★</span><span class="fv-stat-l">Top Reviews</span></div>
+              </div>
+              <a href="clg-scl fest.html" class="fv-cta">Explore Services <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="fv-img reveal from-right">
+              <img src="images/college fest.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80'"
+                alt="College Fest" loading="lazy" />
+              <div class="fv-img-overlay"></div>
+              <span class="fv-img-badge">Premium</span>
+            </div>
+          </div>
+          <!-- Birthdays -->
+          <div class="fv-row">
+            <div class="fv-img reveal from-left">
+              <img src="images/birthdays.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80'"
+                alt="Birthdays" loading="lazy" />
+              <div class="fv-img-overlay"></div>
+              <span class="fv-img-badge">Expert Choice</span>
+            </div>
+            <div class="fv-text reveal from-right">
+              <span class="fv-cat">Event Category</span>
+              <div class="fv-title">BIRTHDAYS</div>
+              <div class="fv-sub">Make Every Birthday Special</div>
+              <p class="fv-desc">Turn every birthday into an extraordinary celebration filled with joy and elegance.
+                Stunning decorations, flawless planning, and a personal touch — crafted to perfection.</p>
+              <div class="fv-stats">
+                <div><span class="fv-stat-n">300+</span><span class="fv-stat-l">Events Planned</span></div>
+                <div><span class="fv-stat-n">20+</span><span class="fv-stat-l">Themes</span></div>
+                <div><span class="fv-stat-n">98%</span><span class="fv-stat-l">Happy Clients</span></div>
+              </div>
+              <a href="birthdays.html" class="fv-cta">View Birthday Services <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+          <!-- Common Parties -->
+          <div class="fv-row img-right">
+            <div class="fv-text reveal from-left">
+              <span class="fv-cat">Event Category</span>
+              <div class="fv-title">COMMON PARTIES</div>
+              <div class="fv-sub">Vibrant Party Celebrations</div>
+              <p class="fv-desc">Celebrate life's special moments with perfectly planned parties. Lively themes,
+                seamless
+                arrangements, and unforgettable experiences for everyone to enjoy.</p>
+              <div class="fv-stats">
+                <div><span class="fv-stat-n">1000+</span><span class="fv-stat-l">Parties Hosted</span></div>
+                <div><span class="fv-stat-n">15+</span><span class="fv-stat-l">Themes</span></div>
+                <div><span class="fv-stat-n">4.9★</span><span class="fv-stat-l">Rating</span></div>
+              </div>
+              <a href="common-parties.html" class="fv-cta">View Party Services <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="fv-img reveal from-right">
+              <img src="images/common parties.jpg"
+                onerror="this.src='https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80'"
+                alt="Common Parties" loading="lazy" />
+              <div class="fv-img-overlay"></div>
+              <span class="fv-img-badge">Trending</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--  WHY CHOOSE US  -->
+      <section class="section-pad" id="why-us">
+        <div class="container">
+          <div class="sec-header reveal">
+            <div class="sec-tag">Our Promise</div>
+            <h2 class="sec-title">Why Choose Eventora?</h2>
+            <p class="sec-sub">We go above and beyond to ensure your event planning experience is as magical as the
+              celebration itself.</p>
+          </div>
+          <div class="why-grid">
+            <div class="why-card reveal from-left d1">
+              <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+              <h3>Verified Professionals</h3>
+              <p>Every vendor on our platform is thoroughly vetted and verified. We check credentials, reviews, and
+                past
+                work so you only see the best.</p>
+            </div>
+            <div class="why-card reveal d2">
+              <div class="why-icon"><i class="fas fa-calendar-check"></i></div>
+              <h3>Easy Booking</h3>
+              <p>Seamless booking in just a few clicks. No complicated paperwork. Get instant confirmation and manage
+                everything from one dashboard.</p>
+            </div>
+            <div class="why-card reveal from-right d3">
+              <div class="why-icon"><i class="fas fa-tags"></i></div>
+              <h3>Affordable Packages</h3>
+              <p>We work with vendors of every budget. From intimate celebrations to grand affairs — find the perfect
+                service without breaking the bank.</p>
+            </div>
+            <div class="why-card reveal from-left d4">
+              <div class="why-icon"><i class="fas fa-headset"></i></div>
+              <h3>24/7 Support</h3>
+              <p>Our dedicated support team is always here for you — day or night. Have a question or need help? We
+                respond within minutes.</p>
+            </div>
+            <div class="why-card reveal d5">
+              <div class="why-icon"><i class="fas fa-star"></i></div>
+              <h3>Real Client Reviews</h3>
+              <p>Read authentic reviews from real clients who have worked with our vendors. Transparent, honest, and
+                helpful — always.</p>
+            </div>
+            <div class="why-card reveal from-right d6">
+              <div class="why-icon"><i class="fas fa-map-marked-alt"></i></div>
+              <h3>Nationwide Coverage</h3>
+              <p>With vendors across 50+ cities, wherever you plan to celebrate, Eventora has the perfect team waiting
+                for
+                you.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--  TESTIMONIALS  -->
+      <section class="testi-section" id="testimonials">
+        <div class="container">
+          <div class="sec-header reveal">
+            <div class="sec-tag">Real Stories</div>
+            <h2 class="sec-title">What Our Clients Say</h2>
+            <p class="sec-sub">Thousands of happy clients share their experiences with Eventora.</p>
+          </div>
+          <div class="testi-slider reveal">
+            <div class="testi-track" id="testiTrack">
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"Eventora made our wedding absolutely magical. Every vendor they recommended was
+                  world-class — the flowers, the photographer, the venue. It felt like a fairy tale come to life."</p>
+                <div class="testi-author">
+                  <div class="testi-avatar">P</div>
+                  <div>
+                    <div class="testi-name">Priya Sharma</div>
+                    <div class="testi-role">Wedding Client · Pune</div>
+                  </div>
+                </div>
+              </div>
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"We organized our college annual fest through Eventora and the experience was
+                  seamless. 2000+ students attended and everything was flawless. Highly recommend!"</p>
+                <div class="testi-author">
+                  <div class="testi-avatar">R</div>
+                  <div>
+                    <div class="testi-name">Rahul Desai</div>
+                    <div class="testi-role">College Event Head · Mumbai</div>
+                  </div>
+                </div>
+              </div>
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"My daughter's 18th birthday was planned to perfection. The team understood our
+                  vision instantly and executed every detail beautifully. Beyond expectations!"</p>
+                <div class="testi-author">
+                  <div class="testi-avatar">A</div>
+                  <div>
+                    <div class="testi-name">Anita Mehta</div>
+                    <div class="testi-role">Birthday Client · Bangalore</div>
+                  </div>
+                </div>
+              </div>
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"The venue they suggested was breathtaking. Our corporate party was a huge hit
+                  and
+                  our clients were genuinely impressed. Will use Eventora for every event from now on."</p>
+                <div class="testi-author">
+                  <div class="testi-avatar">K</div>
+                  <div>
+                    <div class="testi-name">Karan Patel</div>
+                    <div class="testi-role">Corporate Client · Hyderabad</div>
+                  </div>
+                </div>
+              </div>
+              <div class="testi-card">
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">"Booking through Eventora saved us weeks of searching. Their curated vendor list
+                  is
+                  top-notch and the 24/7 support team was always just a message away."</p>
+                <div class="testi-author">
+                  <div class="testi-avatar">S</div>
+                  <div>
+                    <div class="testi-name">Sneha Nair</div>
+                    <div class="testi-role">Party Client · Chennai</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="testi-nav">
+              <button class="testi-nav-btn" id="testiPrev"><i class="fas fa-chevron-left"></i></button>
+              <div class="testi-dots" id="testiDots"></div>
+              <button class="testi-nav-btn" id="testiNext"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--  CTA BANNER  -->
+      <div class="container">
+        <div class="cta-banner reveal">
+          <h2>Ready to Create Your Perfect Event?</h2>
+          <p>Join 10,000+ happy clients who trusted Eventora to bring their celebrations to life.</p>
+          <div class="hero-cta-row">
+            <a href="#services" class="btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
+            <a href="#contact" class="btn-ghost"><i class="fas fa-phone-alt"></i> Talk to an Expert</a>
+          </div>
+        </div>
+      </div>
+      <!--  CONTACT  -->
+      <form class="eventora-form" action="https://api.web3forms.com/submit" method="POST" id="contact">
+
+        <input type="hidden" name="access_key" value="10ace159-d21b-4f6c-a0f0-f65c28199538">
+
+        <h2>Let's Plan Your Event</h2>
+
+        <input type="text" name="name" placeholder="Your Full Name" required>
+
+        <input type="email" name="email" placeholder="Email Address" required>
+
+        <input type="tel" name="phone" placeholder="Mobile Number (10 digits)" pattern="[6-9]{1}[0-9]{9}" maxlength="10"
+          required>
+
+        <textarea name="message" placeholder="Tell us about your event..." required></textarea>
+
+        <button type="submit">Send Message</button>
+
+      </form>
+      <!--  FOOTER  -->
+      <footer>
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-brand-name">EVENTORA</div>
+            <p>India's most trusted event planning platform. Connecting you with the finest vendors to make every
+              celebration extraordinary.</p>
+            <div class="footer-socials">
+              <a href="#" class="footer-social-a" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="footer-social-a" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="footer-social-a" aria-label="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+              <a href="#" class="footer-social-a" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="footer-social-a" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+              <li><a href="Venues.html"><i class="fas fa-chevron-right"></i> Venues</a></li>
+              <li><a href="photographers.html"><i class="fas fa-chevron-right"></i> Photographers</a></li>
+              <li><a href="Wedding Caterers.html"><i class="fas fa-chevron-right"></i> Caterers</a></li>
+              <li><a href="entertainment.html"><i class="fas fa-chevron-right"></i> Entertainment</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <ul class="footer-links">
+              <li><a href="wedding.html"><i class="fas fa-chevron-right"></i> Weddings</a></li>
+              <li><a href="birthdays.html"><i class="fas fa-chevron-right"></i> Birthdays</a></li>
+              <li><a href="clg-scl fest.html"><i class="fas fa-chevron-right"></i> College Fests</a></li>
+              <li><a href="common-parties.html"><i class="fas fa-chevron-right"></i> Parties</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <ul class="footer-links">
+              <li><a href="mailto:support@eventora.com"><i class="fas fa-envelope"></i> support@eventora.com</a></li>
+              <li><a href="tel:+918001234567"><i class="fas fa-phone"></i> +91 80012 34567</a></li>
+              <li><a href="#"><i class="fas fa-map-marker-alt"></i> Koregaon Park, Pune</a></li>
+              <li><a href="#"><i class="fas fa-city"></i> Maharashtra, India</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 <a href="#">Eventora</a>. All rights reserved.</p>
+          <div class="footer-bottom-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Cookie Policy</a>
+          </div>
+        </div>
+      </footer>
+    </div><!-- end .site-wrap -->
+    <!--  AUTH MODAL  -->
+    <div class="auth-modal" id="authModal">
+      <div class="auth-box">
+        <button class="auth-close" id="authClose">&times;</button>
+        <div class="auth-logo"><span>EVENTORA</span></div>
+        <h2 id="authTitle">Welcome Back</h2>
+        <p class="auth-sub" id="authSub">Sign in to your account</p>
+        <input class="auth-input" type="text" id="authName" placeholder="Full Name" style="display:none" />
+        <input class="auth-input" type="email" id="authEmail" placeholder="Email Address" />
+        <input class="auth-input" type="password" id="authPassword" placeholder="Password" />
+        <button class="auth-submit" id="authSubmit">Login</button>
+        <p class="auth-toggle" id="authToggle">Don't have an account? <span id="authToggleSpan">Sign Up</span></p>
+      </div>
+    </div>
+    <!--  SCRIPTS  -->
+    <!-- FIREBASE AUTH -->
+
+
+
+    <script src="script.js"></script>
+    <script type="module" src="main.js"></script>
+
+  </body>
+
+  </html>

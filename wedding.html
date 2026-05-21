@@ -1,0 +1,2564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventora - Wedding Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: #6D28D9;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.nav-open {
+            overflow: hidden;
+        }
+
+        .fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background:
+                linear-gradient(rgba(109, 40, 217, 0.65), rgba(244, 63, 94, 0.75)),
+                url('images/Veneu1.jpg') no-repeat center center / cover;
+            background-attachment: fixed;
+        }
+
+        /* ==========================================
+           VERTICAL NAVBAR (identical to index)
+        ========================================== */
+        .vertical-nav {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(250, 232, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 30px rgba(109, 40, 217, 0.2);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            padding: 30px 0;
+        }
+
+        .vertical-nav.active {
+            left: 0;
+        }
+
+        .nav-toggle {
+            position: fixed;
+            left: 30px;
+            top: 30px;
+            z-index: 1001;
+            background: #F43F5E;
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(244, 63, 94, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-toggle:hover {
+            background: #F9A8D4;
+            transform: scale(1.1);
+        }
+
+        .nav-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-logo a {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #F43F5E;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-logo i {
+            margin-right: 12px;
+            font-size: 28px;
+        }
+
+        .vertical-nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .vertical-nav-links li {
+            margin-bottom: 8px;
+            padding: 0 15px;
+        }
+
+        .vertical-nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: #6D28D9;
+            font-weight: 500;
+            font-size: 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vertical-nav-links a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .vertical-nav-links a:hover {
+            background: rgba(244, 63, 94, 0.15);
+            color: #F43F5E;
+            transform: translateX(8px);
+        }
+
+        .vertical-nav-links a.active {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(244, 63, 94, 0.1));
+            color: #F43F5E;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);
+        }
+
+        .vertical-nav-links a.active:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #F43F5E;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-auth {
+            padding: 30px 20px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(244, 63, 94, 0.1);
+            border-radius: 12px;
+        }
+
+        .user-info i {
+            font-size: 24px;
+            color: #F43F5E;
+            margin-right: 15px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #6D28D9;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .user-email {
+            font-weight: 400;
+            color: #6D28D9;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .nav-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-auth-btn {
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-auth-btn i {
+            margin-right: 12px;
+        }
+
+        .nav-auth-btn.primary {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+        }
+
+        .nav-auth-btn.primary:hover {
+            transform: translateY(-3px);
+        }
+
+        .nav-auth-btn.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6D28D9;
+        }
+
+        .nav-auth-btn.secondary:hover {
+            transform: translateY(-3px);
+        }
+
+        .nav-auth-btn.danger {
+            background: rgba(109, 40, 217, 0.1);
+            color: #6D28D9;
+        }
+
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(109, 40, 217, 0.7);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-overlay.active {
+            display: block;
+        }
+
+        /* Top Right Auth Buttons */
+        .nav-top-auth {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-top-auth-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-top-auth-btn.login {
+            background: #F43F5E;
+            color: white;
+        }
+
+        .nav-top-auth-btn.login:hover {
+            background: #F9A8D4;
+        }
+
+        .nav-top-auth-btn.signup {
+            background: white;
+            color: #6D28D9;
+        }
+
+        .nav-top-auth-btn.signup:hover {
+            background: #F9A8D4;
+        }
+
+        .nav-top-auth-btn.logout {
+            background: #6D28D9;
+            color: white;
+        }
+
+        .nav-top-auth-btn.logout:hover {
+            background: #F43F5E;
+        }
+
+        /* ==========================================
+           CONTENT WRAPPER
+        ========================================== */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.nav-open .content-wrapper {
+            transform: translateX(280px);
+        }
+
+        /* ==========================================
+           SCROLL REVEAL
+        ========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.reveal-left {
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.reveal-right {
+            opacity: 0;
+            transform: translateX(80px);
+            transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.reveal-scale {
+            opacity: 0;
+            transform: scale(0.85) translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        .reveal-delay-5 {
+            transition-delay: 0.5s;
+        }
+
+        .reveal-delay-6 {
+            transition-delay: 0.6s;
+        }
+
+        /* ==========================================
+           HERO SECTION
+        ========================================== */
+        .hero-section {
+            text-align: center;
+            padding: 160px 20px 100px;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        .hero-breadcrumb {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #F9A8D4;
+            margin-bottom: 30px;
+            backdrop-filter: blur(8px);
+            animation: fadeInDown 0.8s ease both;
+        }
+
+        .hero-breadcrumb a {
+            color: #F9A8D4;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .hero-breadcrumb a:hover {
+            color: white;
+        }
+
+        .hero-breadcrumb i {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            text-shadow: 0 2px 10px rgba(109, 40, 217, 0.5);
+            animation: fadeInUp 0.9s ease 0.3s both;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #fff, #F9A8D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #FAE8FF;
+            margin-bottom: 50px;
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            animation: fadeInUp 0.9s ease 0.45s both;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.9s ease 0.6s both;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-btn.primary {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            box-shadow: 0 12px 35px rgba(244, 63, 94, 0.4);
+        }
+
+        .hero-btn.primary:hover {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 20px 50px rgba(244, 63, 94, 0.55);
+        }
+
+        .hero-btn.secondary {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(244, 63, 94, 0.4);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* ==========================================
+           SECTION HEADER
+        ========================================== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #F9A8D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: rgba(250, 232, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ==========================================
+           SERVICES GRID (main 6 categories)
+        ========================================== */
+        .services-section {
+            padding: 100px 20px;
+        }
+
+        .services-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 26px;
+            overflow: hidden;
+            transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            group: true;
+        }
+
+        .service-card:hover {
+            transform: translateY(-18px) scale(1.02);
+            box-shadow: 0 40px 80px rgba(244, 63, 94, 0.25);
+            border-color: rgba(244, 63, 94, 0.4);
+            background: rgba(255, 255, 255, 0.11);
+        }
+
+        .service-card-img {
+            height: 230px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+        }
+
+        .service-card:hover .service-card-img img {
+            transform: scale(1.12);
+        }
+
+        .service-img-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(transparent, rgba(109, 40, 217, 0.7));
+            pointer-events: none;
+        }
+
+        .service-card-badge {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+            z-index: 2;
+        }
+
+        .service-card-icon {
+            position: absolute;
+            bottom: 18px;
+            right: 18px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover .service-card-icon {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            border-color: transparent;
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .service-card-body {
+            padding: 30px;
+        }
+
+        .service-card-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .service-card:hover .service-card-body h3 {
+            color: #F9A8D4;
+        }
+
+        .service-card-body p {
+            color: rgba(250, 232, 255, 0.72);
+            font-size: 14px;
+            line-height: 1.72;
+            margin-bottom: 22px;
+        }
+
+        .service-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .service-card-stats {
+            display: flex;
+            gap: 18px;
+        }
+
+        .scs-item .scs-val {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #F43F5E;
+            display: block;
+            line-height: 1;
+        }
+
+        .scs-item .scs-lbl {
+            font-size: 11px;
+            color: rgba(250, 232, 255, 0.55);
+        }
+
+        .service-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #F43F5E;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .service-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .service-link:hover {
+            color: #F9A8D4;
+        }
+
+        .service-link:hover i {
+            transform: translateX(6px);
+        }
+
+        /* ==========================================
+           PROCESS BANNER
+        ========================================== */
+        .process-section {
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.2), rgba(244, 63, 94, 0.12));
+            backdrop-filter: blur(4px);
+        }
+
+        .process-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-timeline {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            position: relative;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 38px;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, #F43F5E, #F9A8D4, #F43F5E);
+            z-index: 0;
+        }
+
+        .process-step {
+            flex: 1;
+            text-align: center;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-dot {
+            width: 76px;
+            height: 76px;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 22px;
+            font-size: 1.6rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(244, 63, 94, 0.45);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-step:hover .process-dot {
+            transform: scale(1.15) rotate(8deg);
+            box-shadow: 0 18px 45px rgba(244, 63, 94, 0.6);
+        }
+
+        .process-step h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .process-step p {
+            font-size: 13px;
+            color: rgba(250, 232, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* ==========================================
+           WHY CHOOSE US
+        ========================================== */
+        .why-section {
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-section::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -15%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(244, 63, 94, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .why-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 42px 38px;
+            display: flex;
+            align-items: flex-start;
+            gap: 26px;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.08), rgba(244, 63, 94, 0.02));
+            transition: width 0.5s ease;
+            border-radius: 24px;
+        }
+
+        .why-card:hover::before {
+            width: 100%;
+        }
+
+        .why-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(244, 63, 94, 0.2);
+            border-color: rgba(244, 63, 94, 0.3);
+        }
+
+        .why-icon {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(249, 168, 212, 0.15));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(244, 63, 94, 0.25);
+            transition: all 0.4s ease;
+        }
+
+        .why-card:hover .why-icon {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            box-shadow: 0 10px 30px rgba(244, 63, 94, 0.4);
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .why-icon i {
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.4s ease;
+        }
+
+        .why-card:hover .why-icon i {
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .why-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            color: white;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .why-text p {
+            color: rgba(250, 232, 255, 0.73);
+            font-size: 14px;
+            line-height: 1.75;
+        }
+
+        /* ==========================================
+           TESTIMONIALS
+        ========================================== */
+        .testimonials-section {
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonials-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(109, 40, 217, 0.15), rgba(244, 63, 94, 0.08));
+            backdrop-filter: blur(3px);
+        }
+
+        .testimonials-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 24px;
+            padding: 38px 32px;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            font-size: 6rem;
+            font-family: 'Playfair Display', serif;
+            color: rgba(244, 63, 94, 0.18);
+            line-height: 1;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 35px 70px rgba(244, 63, 94, 0.22);
+            border-color: rgba(244, 63, 94, 0.35);
+            background: rgba(255, 255, 255, 0.11);
+        }
+
+        .t-stars {
+            color: #F43F5E;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            letter-spacing: 3px;
+        }
+
+        .t-text {
+            font-size: 14px;
+            color: rgba(250, 232, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 26px;
+            font-style: italic;
+        }
+
+        .t-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .t-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .t-name {
+            font-weight: 600;
+            color: white;
+            font-size: 15px;
+            margin-bottom: 3px;
+        }
+
+        .t-label {
+            font-size: 12px;
+            color: rgba(250, 232, 255, 0.55);
+        }
+
+        /* ==========================================
+           CTA BANNER
+        ========================================== */
+        .cta-section {
+            padding: 80px 20px;
+        }
+
+        .cta-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(109, 40, 217, 0.3));
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            border-radius: 32px;
+            padding: 80px 60px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-inner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -30%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(244, 63, 94, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-inner::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            right: -20%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(109, 40, 217, 0.2), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-inner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-inner p {
+            font-size: 1.1rem;
+            color: rgba(250, 232, 255, 0.82);
+            margin-bottom: 42px;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.75;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 42px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-btn.primary {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            box-shadow: 0 12px 35px rgba(244, 63, 94, 0.4);
+        }
+
+        .cta-btn.primary:hover {
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 20px 50px rgba(244, 63, 94, 0.55);
+        }
+
+        .cta-btn.secondary {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(8px);
+        }
+
+        .cta-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(-5px);
+        }
+
+        /* ==========================================
+           CONTACT SECTION
+        ========================================== */
+        .contact-section {
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #2A0A3D, #6D28D9, #F43F5E);
+            background-size: 300% 300%;
+            animation: gradientMove 12s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .contact-container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            gap: 60px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .contact-left {
+            flex: 1;
+            color: white;
+        }
+
+        .contact-left h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .contact-left p {
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .contact-form {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            transition: 0.4s;
+        }
+
+        .contact-form:hover {
+            transform: translateY(-8px);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 18px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.4);
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #F43F5E, #6D28D9);
+            transition: 0.3s;
+        }
+
+        .contact-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(244, 63, 94, 0.5);
+        }
+
+        /* ==========================================
+           FOOTER
+        ========================================== */
+        footer {
+            background: rgba(109, 40, 217, 0.9);
+            padding: 70px 0 30px;
+            border-top: 1px solid rgba(250, 232, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .footer-column h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #F43F5E;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #F43F5E;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 18px;
+        }
+
+        .footer-links a {
+            color: rgba(250, 232, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .footer-links a i {
+            margin-right: 12px;
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .footer-links a:hover {
+            color: #F43F5E;
+            transform: translateX(8px);
+        }
+
+        .social-icons {
+            display: flex;
+            margin-top: 25px;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(250, 232, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            background: #F43F5E;
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.3);
+        }
+
+        .copyright {
+            text-align: center;
+            border-top: 1px solid rgba(250, 232, 255, 0.1);
+            color: rgba(250, 232, 255, 0.5);
+            font-size: 14px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px 0;
+        }
+
+        .copyright a {
+            color: #F43F5E;
+            text-decoration: none;
+        }
+
+        .copyright a:hover {
+            color: #F9A8D4;
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(109, 40, 217, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-box {
+            background: rgba(250, 232, 255, 0.95);
+            padding: 45px;
+            width: 420px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(109, 40, 217, 0.3);
+            position: relative;
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .auth-box .close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #6D28D9;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .auth-box .close:hover {
+            color: #F43F5E;
+            background: rgba(244, 63, 94, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .auth-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #6D28D9;
+            text-align: center;
+        }
+
+        .auth-box p.subtitle {
+            text-align: center;
+            color: #6D28D9;
+            margin-bottom: 35px;
+            font-size: 16px;
+        }
+
+        .auth-box input {
+            width: 100%;
+            padding: 18px 20px;
+            margin: 15px 0;
+            border: 2px solid #F9A8D4;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .auth-box input:focus {
+            border-color: #F43F5E;
+            box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.15);
+            outline: none;
+        }
+
+        .auth-box button {
+            width: 100%;
+            padding: 18px;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-box button:hover {
+            transform: translateY(-3px);
+        }
+
+        #toggleAuth {
+            text-align: center;
+            margin-top: 30px;
+            color: #6D28D9;
+            font-size: 15px;
+        }
+
+        #toggleAuth span {
+            color: #F43F5E;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* ==========================================
+           RESPONSIVE
+        ========================================== */
+        @media (max-width: 1100px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .hero-title {
+                font-size: 3.4rem;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-timeline {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+
+            .process-timeline::before {
+                display: none;
+            }
+
+            .process-step {
+                flex: 0 0 calc(50% - 15px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vertical-nav {
+                width: 100%;
+                left: -100%;
+            }
+
+            body.nav-open .vertical-nav {
+                left: 0;
+            }
+
+            body.nav-open .content-wrapper {
+                transform: translateX(0);
+            }
+
+            .nav-toggle {
+                left: 20px;
+                top: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .hero-section {
+                padding: 130px 15px 80px;
+            }
+
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-inner {
+                padding: 50px 30px;
+            }
+
+            .cta-inner h2 {
+                font-size: 2.1rem;
+            }
+
+            .contact-container {
+                flex-direction: column;
+            }
+
+            .contact-left h2 {
+                font-size: 2rem;
+            }
+
+            .auth-box {
+                width: 90%;
+                max-width: 400px;
+                padding: 35px;
+            }
+
+            .section-header h2 {
+                font-size: 2.3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.3rem;
+            }
+
+            .process-step {
+                flex: 0 0 100%;
+            }
+
+            .why-card {
+                flex-direction: column;
+                padding: 28px 22px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+         /* ===== Form Container ===== */
+    .eventora-form {
+      max-width: 520px;
+      margin: 80px auto;
+      padding: 50px 40px;
+      border-radius: 20px;
+      background: var(--eventora-card);
+      background-color: #0a01183a;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+      font-family: "Poppins", sans-serif;
+      text-align: center;
+      color: var(--eventora-text);
+    }
+
+    /* Heading */
+    .eventora-form h2 {
+      margin-bottom: 30px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    /* Inputs */
+    .eventora-form input,
+    .eventora-form textarea {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: transparent;
+      color: white;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    /* Placeholder color */
+    .eventora-form input::placeholder,
+    .eventora-form textarea::placeholder {
+      color: #aaa;
+    }
+
+    /* Focus Glow */
+    .eventora-form input:focus,
+    .eventora-form textarea:focus {
+      border-color: var(--eventora-accent);
+      box-shadow: 0 0 15px rgba(201, 169, 110, 0.4);
+      outline: none;
+    }
+
+    /* Button */
+    .eventora-form button {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(135deg,
+          var(--eventora-primary),
+          var(--eventora-accent));
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    /* Hover */
+    .eventora-form button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(201, 169, 110, 0.4);
+    }
+
+    /* Click */
+    .eventora-form button:active {
+      transform: scale(0.97);
+    }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-bg"></div>
+    <div class="nav-overlay" id="navOverlay"></div>
+    <!-- ==========================================
+         VERTICAL NAVBAR
+    ========================================== -->
+    <nav class="vertical-nav" id="verticalNav">
+        <div class="nav-logo">
+            <br><br><br>
+            <a href="index.html"><i class="fas fa-heart"></i>Eventora</a>
+        </div>
+        <ul class="vertical-nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="Venues.html"><i class="fas fa-building"></i> Venues</a></li>
+            <li><a href="photographers.html"><i class="fas fa-camera"></i> Photographers</a></li>
+            <li><a href="Wedding Caterers.html"><i class="fas fa-utensils"></i> Caterers</a></li>
+            <li><a href="entertainment.html"><i class="fas fa-music"></i> Entertainment</a></li>
+        </ul>
+        <div class="nav-auth">
+            <div class="user-info" id="userInfo">
+                <i class="fas fa-user-circle"></i>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Guest</div>
+                    <div class="user-email" id="userEmailNav">Not logged in</div>
+                </div>
+            </div>
+            <div class="nav-auth-buttons">
+                <button id="navLoginBtn" class="nav-auth-btn primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button id="navSignupBtn" class="nav-auth-btn secondary"><i class="fas fa-user-plus"></i> Sign
+                    Up</button>
+                <button id="navLogoutBtn" class="nav-auth-btn danger" style="display:none;"><i
+                        class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+    </nav>
+    <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars" id="navToggleIcon"></i>
+    </button>
+    <!-- Top Right Auth -->
+    <div class="top-auth">
+
+      <!-- LOGIN BUTTON -->
+      <button id="topLoginBtn" class="login-btn">
+        Login
+      </button>
+
+      <!-- PROFILE SECTION -->
+      <div id="profileContainer">
+
+        <img id="userPhoto" src="" alt="Profile">
+
+        <button id="logoutBtn">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+    <img id="navUserPhoto" width="40" height="40" style="border-radius:50%;">
+
+    <span id="navUserName"></span>
+
+    <button id="logoutBtn">Logout</button>
+
+    </div>
+    </div>
+    <div class="content-wrapper">
+        <!-- ==========================================
+             HERO
+        ========================================== -->
+        <section class="hero-section" style="position:relative;">
+            <div class="particles" id="particles"></div>
+            <div class="hero-breadcrumb">
+                <a href="index.html">Home</a>
+                <i class="fas fa-chevron-right"></i>
+                <span style="color:white;">Wedding Management</span>
+            </div>
+            <span class="hero-tag">Premium Service</span>
+            <h1 class="hero-title">Your <span>Dream Wedding,</span><br>Perfectly Managed</h1>
+            <p class="hero-subtitle">
+                From the first petal to the final dance — our expert wedding management team orchestrates every detail
+                with elegance, passion, and flawless precision so you can simply enjoy the moment.
+            </p>
+            <div class="hero-cta-group">
+                <a href="#services" class="hero-btn primary">
+                    <i class="fas fa-star"></i> Explore Services
+                </a>
+                <a href="#contact" class="hero-btn secondary">
+                    <i class="fas fa-phone"></i> Talk to Us
+                </a>
+            </div>
+        </section>
+        <!-- ==========================================
+             SERVICES — 6 CATEGORIES
+        ========================================== -->
+        <section class="services-section" id="services">
+            <div class="services-inner">
+                <div class="section-header reveal">
+                    <span class="section-tag">What We Offer</span>
+                    <h2>All-In-One Wedding Services</h2>
+                    <p>Every element of your celebration, curated and managed by specialists who live and breathe
+                        weddings.</p>
+                </div>
+                <div class="services-grid">
+                    <!-- 1. Photography -->
+                    <div class="service-card reveal reveal-scale reveal-delay-1">
+                        <div class="service-card-img">
+                            <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Photography">
+                            <div class="service-img-overlay"></div>
+                            <span class="service-card-badge">Most Booked</span>
+                            <div class="service-card-icon"><i class="fas fa-camera"></i></div>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Photography</h3>
+                            <p>Capture every tear, laugh, and tender glance with our award-winning photographers.
+                                Timeless frames that tell your love story beautifully.</p>
+                            <div class="service-card-footer">
+                                <div class="service-card-stats">
+                                    <div class="scs-item">
+                                        <span class="scs-val">200+</span>
+                                        <span class="scs-lbl">Shoots Done</span>
+                                    </div>
+                                    <div class="scs-item">
+                                        <span class="scs-val">4.9★</span>
+                                        <span class="scs-lbl">Rating</span>
+                                    </div>
+                                </div>
+                                <a href="photographers.html" class="service-link">
+                                    View All <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 2. Caterers -->
+                    <div class="service-card reveal reveal-scale reveal-delay-2">
+                        <div class="service-card-img">
+                            <img src="https://images.unsplash.com/photo-1555244162-803834f70033?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Catering">
+                            <div class="service-img-overlay"></div>
+                            <span class="service-card-badge">Top Rated</span>
+                            <div class="service-card-icon"><i class="fas fa-utensils"></i></div>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Caterers</h3>
+                            <p>Delight your guests with exquisite menus crafted by master chefs. From intimate dinners
+                                to grand feasts across 20+ cuisine styles.</p>
+                            <div class="service-card-footer">
+                                <div class="service-card-stats">
+                                    <div class="scs-item">
+                                        <span class="scs-val">300+</span>
+                                        <span class="scs-lbl">Menus</span>
+                                    </div>
+                                    <div class="scs-item">
+                                        <span class="scs-val">98%</span>
+                                        <span class="scs-lbl">Happy Clients</span>
+                                    </div>
+                                </div>
+                                <a href="Wedding Caterers.html" class="service-link">
+                                    View All <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 3. Venues -->
+                    <div class="service-card reveal reveal-scale reveal-delay-3">
+                        <div class="service-card-img">
+                            <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Venues">
+                            <div class="service-img-overlay"></div>
+                            <span class="service-card-badge">Premium</span>
+                            <div class="service-card-icon"><i class="fas fa-building"></i></div>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Venues</h3>
+                            <p>Discover breathtaking settings — palace ballrooms, garden terraces, beachside resorts,
+                                and intimate boutique halls — all vetted for perfection.</p>
+                            <div class="service-card-footer">
+                                <div class="service-card-stats">
+                                    <div class="scs-item">
+                                        <span class="scs-val">150+</span>
+                                        <span class="scs-lbl">Venues</span>
+                                    </div>
+                                    <div class="scs-item">
+                                        <span class="scs-val">50+</span>
+                                        <span class="scs-lbl">Cities</span>
+                                    </div>
+                                </div>
+                                <a href="Venues.html" class="service-link">
+                                    View All <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 4. Makeup Artists -->
+                    <div class="service-card reveal reveal-scale reveal-delay-4">
+                        <div class="service-card-img">
+                            <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Makeup Artists">
+                            <div class="service-img-overlay"></div>
+                            <span class="service-card-badge">Trending</span>
+                            <div class="service-card-icon"><i class="fas fa-paint-brush"></i></div>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Makeup Artists</h3>
+                            <p>Look absolutely radiant on your big day. Our bridal makeup artists blend artistry with
+                                skincare expertise to create your flawless bridal look.</p>
+                            <div class="service-card-footer">
+                                <div class="service-card-stats">
+                                    <div class="scs-item">
+                                        <span class="scs-val">1000+</span>
+                                        <span class="scs-lbl">Brides</span>
+                                    </div>
+                                    <div class="scs-item">
+                                        <span class="scs-val">4.9★</span>
+                                        <span class="scs-lbl">Rating</span>
+                                    </div>
+                                </div>
+                                <a href="#makeup" class="service-link">
+                                    View All <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 5. Music -->
+                    <div class="service-card reveal reveal-scale reveal-delay-5">
+                        <div class="service-card-img">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Music">
+                            <div class="service-img-overlay"></div>
+                            <span class="service-card-badge">Crowd Favourite</span>
+                            <div class="service-card-icon"><i class="fas fa-music"></i></div>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Music</h3>
+                            <p>Set the perfect mood for every moment — from the sacred ceremony to the electric dance
+                                floor. Live bands, DJs, and curated playlists all available.</p>
+                            <div class="service-card-footer">
+                                <div class="service-card-stats">
+                                    <div class="scs-item">
+                                        <span class="scs-val">80+</span>
+                                        <span class="scs-lbl">Artists</span>
+                                    </div>
+                                    <div class="scs-item">
+                                        <span class="scs-val">500+</span>
+                                        <span class="scs-lbl">Events</span>
+                                    </div>
+                                </div>
+                                <a href="entertainment.html" class="service-link">
+                                    View All <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 6. Entertainment -->
+                    <div class="service-card reveal reveal-scale reveal-delay-6">
+                        <div class="service-card-img">
+                            <img src="https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                alt="Entertainment">
+                            <div class="service-img-overlay"></div>
+                            <span class="service-card-badge">New</span>
+                            <div class="service-card-icon"><i class="fas fa-theater-masks"></i></div>
+                        </div>
+                        <div class="service-card-body">
+                            <h3>Entertainment</h3>
+                            <p>Wow your guests with spectacular performances — fireworks, dance troupes, magicians,
+                                photo booths, and fully themed immersive experiences.</p>
+                            <div class="service-card-footer">
+                                <div class="service-card-stats">
+                                    <div class="scs-item">
+                                        <span class="scs-val">120+</span>
+                                        <span class="scs-lbl">Acts</span>
+                                    </div>
+                                    <div class="scs-item">
+                                        <span class="scs-val">5★</span>
+                                        <span class="scs-lbl">Reviews</span>
+                                    </div>
+                                </div>
+                                <a href="entertainment.html" class="service-link">
+                                    View All <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ==========================================
+             HOW WE WORK (PROCESS)
+        ========================================== -->
+        <section class="process-section">
+            <div class="process-inner">
+                <div class="section-header reveal">
+                    <span class="section-tag">Our Process</span>
+                    <h2>From Vision to Reality</h2>
+                    <p>A seamless, stress-free journey from your very first call to the last sparkler of the night.</p>
+                </div>
+                <div class="process-timeline">
+                    <div class="process-step reveal reveal-delay-1">
+                        <div class="process-dot"><i class="fas fa-comments"></i></div>
+                        <h4>Consultation</h4>
+                        <p>Share your vision and budget. We listen, plan, and align with your dream.</p>
+                    </div>
+                    <div class="process-step reveal reveal-delay-2">
+                        <div class="process-dot"><i class="fas fa-drafting-compass"></i></div>
+                        <h4>Custom Planning</h4>
+                        <p>We craft a personalised roadmap covering every detail and timeline.</p>
+                    </div>
+                    <div class="process-step reveal reveal-delay-3">
+                        <div class="process-dot"><i class="fas fa-handshake"></i></div>
+                        <h4>Vendor Booking</h4>
+                        <p>We coordinate and confirm with the finest vetted vendors on your behalf.</p>
+                    </div>
+                    <div class="process-step reveal reveal-delay-4">
+                        <div class="process-dot"><i class="fas fa-tasks"></i></div>
+                        <h4>Day Coordination</h4>
+                        <p>Our team is on-site ensuring everything runs flawlessly from dawn to dusk.</p>
+                    </div>
+                    <div class="process-step reveal reveal-delay-5">
+                        <div class="process-dot"><i class="fas fa-champagne-glasses"></i></div>
+                        <h4>Celebration!</h4>
+                        <p>You enjoy every magical moment while we handle everything behind the scenes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ==========================================
+             WHY CHOOSE US
+        ========================================== -->
+        <section class="why-section">
+            <div class="why-inner">
+                <div class="section-header reveal">
+                    <span class="section-tag">Our Promise</span>
+                    <h2>Why Trust Our Management Team?</h2>
+                    <p>We bring unmatched dedication, creative excellence, and calm expertise to every celebration we
+                        touch.</p>
+                </div>
+                <div class="why-grid">
+                    <div class="why-card reveal reveal-left reveal-delay-1">
+                        <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="why-text">
+                            <h3>100% Verified Vendors</h3>
+                            <p>Every partner in our network is background-checked, reviewed, and consistently evaluated
+                                to ensure only premium quality reaches your wedding day.</p>
+                        </div>
+                    </div>
+                    <div class="why-card reveal reveal-right reveal-delay-2">
+                        <div class="why-icon"><i class="fas fa-gem"></i></div>
+                        <div class="why-text">
+                            <h3>Bespoke Experiences</h3>
+                            <p>No two weddings are alike. We design every detail around your unique love story,
+                                personality, and vision — never from a template.</p>
+                        </div>
+                    </div>
+                    <div class="why-card reveal reveal-left reveal-delay-3">
+                        <div class="why-icon"><i class="fas fa-headset"></i></div>
+                        <div class="why-text">
+                            <h3>24/7 Dedicated Support</h3>
+                            <p>A personal coordinator is assigned to you from day one — always reachable, always calm,
+                                and always one step ahead of any challenge.</p>
+                        </div>
+                    </div>
+                    <div class="why-card reveal reveal-right reveal-delay-4">
+                        <div class="why-icon"><i class="fas fa-tags"></i></div>
+                        <div class="why-text">
+                            <h3>Transparent Pricing</h3>
+                            <p>No hidden costs, no surprises. Our clear packages and honest billing mean you always know
+                                exactly where every rupee goes.</p>
+                        </div>
+                    </div>
+                    <div class="why-card reveal reveal-left reveal-delay-5">
+                        <div class="why-icon"><i class="fas fa-clock"></i></div>
+                        <div class="why-text">
+                            <h3>Flawless Execution</h3>
+                            <p>With 200+ weddings managed, our on-ground team runs a tight ship — every cue, every
+                                moment, every transition executed with precision.</p>
+                        </div>
+                    </div>
+                    <div class="why-card reveal reveal-right reveal-delay-6">
+                        <div class="why-icon"><i class="fas fa-star"></i></div>
+                        <div class="why-text">
+                            <h3>Memorable Moments</h3>
+                            <p>Beyond logistics, we are memory-makers. Every detail is chosen to create emotions and
+                                moments your family will talk about for generations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ==========================================
+             TESTIMONIALS
+        ========================================== -->
+        <section class="testimonials-section">
+            <div class="testimonials-inner">
+                <div class="section-header reveal">
+                    <span class="section-tag">Real Couples</span>
+                    <h2>Words That Warm Our Hearts</h2>
+                    <p>Thousands of couples have trusted us with the most important day of their lives. Here is what
+                        they say.</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card reveal reveal-delay-1">
+                        <div class="t-stars">★★★★★</div>
+                        <p class="t-text">"Every single moment was breathtaking. From the floral arrangements to the
+                            live band — nothing was left to chance. Our wedding was absolutely perfect."</p>
+                        <div class="t-author">
+                            <div class="t-avatar">P</div>
+                            <div>
+                                <div class="t-name">Priya & Arjun</div>
+                                <div class="t-label">Garden Wedding · Pune</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card reveal reveal-delay-2">
+                        <div class="t-stars">★★★★★</div>
+                        <p class="t-text">"I was so stressed before hiring Eventora. The moment I did, everything
+                            just flowed. My coordinator felt like a best friend by the end of it."</p>
+                        <div class="t-author">
+                            <div class="t-avatar">S</div>
+                            <div>
+                                <div class="t-name">Sneha & Rohan</div>
+                                <div class="t-label">Palace Wedding · Jaipur</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card reveal reveal-delay-3">
+                        <div class="t-stars">★★★★★</div>
+                        <p class="t-text">"The photographers captured moments I did not even notice happening. And the
+                            food — every guest is still talking about it weeks later!"</p>
+                        <div class="t-author">
+                            <div class="t-avatar">A</div>
+                            <div>
+                                <div class="t-name">Aisha & Kabir</div>
+                                <div class="t-label">Beachside Wedding · Goa</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- ==========================================
+             CTA BANNER
+        ========================================== -->
+        <section class="cta-section">
+            <div class="cta-inner reveal reveal-scale">
+                <h2>Ready to Begin Your Story?</h2>
+                <p>Let our team transform your wedding vision into an unforgettable reality. Reach out today — your
+                    dream day is closer than you think.</p>
+                <div class="cta-btn-group">
+                    <a href="#contact" class="cta-btn primary">
+                        <i class="fas fa-heart"></i> Start Planning Now
+                    </a>
+                    <a href="index.html" class="cta-btn secondary">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div><!-- end content-wrapper -->
+    <!-- ==========================================
+         CONTACT SECTION
+    ========================================== -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <div class="contact-left">
+                <h2>Let's Plan Your Perfect Wedding</h2>
+                <p>Tell us about your dream day. Our wedding management specialists will get back to you within 24 hours
+                    with a personalised plan crafted just for you.</p>
+                <div class="contact-info">
+                    <p>📞 +91 98765 43210</p>
+                    <p>📧 weddings@Eventora.com</p>
+                    <p>📍 Pune, Maharashtra, India</p>
+                </div>
+            </div>
+         <form class="eventora-form" action="https://api.web3forms.com/submit" method="POST" id="contact">
+
+      <input type="hidden" name="access_key" value="10ace159-d21b-4f6c-a0f0-f65c28199538">
+
+      <h2>Let's Plan Your Event</h2>
+
+      <input type="text" name="name" placeholder="Your Full Name" required>
+
+      <input type="email" name="email" placeholder="Email Address" required>
+
+      <input type="tel" name="phone" placeholder="Mobile Number (10 digits)" pattern="[6-9]{1}[0-9]{9}" maxlength="10"
+        required>
+
+      <textarea name="message" placeholder="Tell us about your event..." required></textarea>
+
+      <button type="submit">Send Message</button>
+
+    </form>
+        </div>
+    </section>
+    <!-- ==========================================
+         FOOTER
+    ========================================== -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Eventora</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="Venues.html"><i class="fas fa-chevron-right"></i> Venues</a></li>
+                    <li><a href="photographers.html"><i class="fas fa-chevron-right"></i> Photographers</a></li>
+                    <li><a href="Wedding Caterers.html"><i class="fas fa-chevron-right"></i> Caterers</a></li>
+                    <li><a href="entertainment.html"><i class="fas fa-chevron-right"></i> Entertainment</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> support@Eventora.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> (800) 555-1234</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Wedding Ave</a></li>
+                    <li><a href="#"><i class="fas fa-city"></i> Beverly Hills, CA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Eventora. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of
+                    Service</a></p>
+        </div>
+    </footer>
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-box">
+            <span class="close">&times;</span>
+            <h2 id="authTitle">Welcome Back</h2>
+            <p class="subtitle" id="authSubtitle">Sign in to continue</p>
+            <input type="text" id="name" placeholder="Full Name" style="display:none;">
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button id="authActionBtn">Login</button>
+            <p id="toggleAuth">Don't have an account? <span>Sign Up</span></p>
+        </div>
+    </div>
+    <!-- ==========================================
+         SCRIPTS
+    ========================================== -->
+    <!-- Navbar Script -->
+    <script>
+        const navToggle = document.getElementById('navToggle');
+        const verticalNav = document.getElementById('verticalNav');
+        const navToggleIcon = document.getElementById('navToggleIcon');
+        const navOverlay = document.getElementById('navOverlay');
+        const body = document.body;
+        navToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            verticalNav.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            body.classList.toggle('nav-open');
+            navToggleIcon.className = verticalNav.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        });
+        navOverlay.addEventListener('click', function () {
+            verticalNav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            body.classList.remove('nav-open');
+            navToggleIcon.className = 'fas fa-bars';
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && verticalNav.classList.contains('active')) {
+                verticalNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                body.classList.remove('nav-open');
+                navToggleIcon.className = 'fas fa-bars';
+            }
+        });
+        document.querySelectorAll('.vertical-nav-links a').forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    verticalNav.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    body.classList.remove('nav-open');
+                    navToggleIcon.className = 'fas fa-bars';
+                }
+            });
+        });
+    </script>
+    <!-- Scroll Reveal Script -->
+    <script>
+        (function () {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+            reveals.forEach(function (el) { observer.observe(el); });
+        })();
+    </script>
+    <!-- Floating Particles Script -->
+    <script>
+        (function () {
+            const container = document.getElementById('particles');
+            if (!container) return;
+            const colors = ['rgba(244,63,94,0.5)', 'rgba(249,168,212,0.4)', 'rgba(255,255,255,0.3)', 'rgba(109,40,217,0.5)'];
+            for (let i = 0; i < 22; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 8 + 4;
+                p.style.cssText = `
+                    width:${size}px;
+                    height:${size}px;
+                    left:${Math.random() * 100}%;
+                    animation-duration:${Math.random() * 12 + 8}s;
+                    animation-delay:${Math.random() * 10}s;
+                    background:${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius:${Math.random() > 0.5 ? '50%' : '3px'};
+                `;
+                container.appendChild(p);
+            }
+        })();
+    </script>
+    <!-- Smooth scroll for anchor links -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+    <!-- Firebase Auth Module -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8Wp7S4fg5YURaNYAA2ngzUD11VCwTaGI",
+            authDomain: "o-e-m-system.firebaseapp.com",
+            projectId: "o-e-m-system",
+            storageBucket: "o-e-m-system.appspot.com",
+            messagingSenderId: "298561567790",
+            appId: "1:298561567790:web:8a3b3fc2c4fc9801e4f3bf"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const navTopLoginBtn = document.getElementById("navTopLoginBtn");
+        const navTopSignupBtn = document.getElementById("navTopSignupBtn");
+        const navTopLogoutBtn = document.getElementById("navTopLogoutBtn");
+        const navLoginBtn = document.getElementById("navLoginBtn");
+        const navSignupBtn = document.getElementById("navSignupBtn");
+        const navLogoutBtn = document.getElementById("navLogoutBtn");
+        const userInfo = document.getElementById("userInfo");
+        const userName = document.getElementById("userName");
+        const userEmailNav = document.getElementById("userEmailNav");
+        const modal = document.getElementById("authModal");
+        const closeBtn = document.querySelector(".close");
+        const authTitle = document.getElementById("authTitle");
+        const authSubtitle = document.getElementById("authSubtitle");
+        const authActionBtn = document.getElementById("authActionBtn");
+        const toggleAuth = document.getElementById("toggleAuth");
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        let isLogin = true;
+        function openModal(loginMode) {
+            isLogin = loginMode;
+            authTitle.innerText = loginMode ? "Welcome Back" : "Create Account";
+            authSubtitle.innerText = loginMode ? "Sign in to continue" : "Join Eventora today";
+            authActionBtn.innerText = loginMode ? "Login" : "Sign Up";
+            toggleAuth.innerHTML = loginMode
+                ? `Don't have an account? <span>Sign Up</span>`
+                : `Already have an account? <span>Login</span>`;
+            nameInput.style.display = loginMode ? "none" : "block";
+            emailInput.value = ""; passwordInput.value = ""; nameInput.value = "";
+            modal.style.display = "flex";
+        }
+        function showNotification(message, type) {
+            const n = document.createElement('div');
+            n.textContent = message;
+            n.style.cssText = `position:fixed;top:20px;right:20px;padding:15px 25px;
+                background:${type === 'success' ? '#4CAF50' : '#f44336'};color:white;
+                border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.3);
+                z-index:3000;font-weight:500;`;
+            document.body.appendChild(n);
+            setTimeout(() => { n.style.opacity = '0'; n.style.transition = 'opacity 0.3s'; setTimeout(() => n.remove(), 300); }, 3000);
+        }
+        function updateUI(user) {
+            if (user) {
+                navTopLoginBtn.style.display = "none";
+                navTopSignupBtn.style.display = "none";
+                navTopLogoutBtn.style.display = "block";
+                userInfo.style.display = "flex";
+                navLoginBtn.style.display = "none";
+                navSignupBtn.style.display = "none";
+                navLogoutBtn.style.display = "block";
+            } else {
+                navTopLoginBtn.style.display = "block";
+                navTopSignupBtn.style.display = "block";
+                navTopLogoutBtn.style.display = "none";
+                userInfo.style.display = "none";
+                navLoginBtn.style.display = "block";
+                navSignupBtn.style.display = "block";
+                navLogoutBtn.style.display = "none";
+            }
+        }
+        navTopLoginBtn.addEventListener("click", () => openModal(true));
+        navTopSignupBtn.addEventListener("click", () => openModal(false));
+        navLoginBtn.addEventListener("click", () => openModal(true));
+        navSignupBtn.addEventListener("click", () => openModal(false));
+        [navTopLogoutBtn, navLogoutBtn].forEach(btn => btn.addEventListener("click", () => {
+            signOut(auth).then(() => { updateUI(null); showNotification("Logged out successfully!", "success"); });
+        }));
+        closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
+        toggleAuth.addEventListener("click", e => { if (e.target.tagName === "SPAN") openModal(!isLogin); });
+        window.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
+        document.addEventListener("keydown", e => { if (e.key === "Escape" && modal.style.display === "flex") modal.style.display = "none"; });
+        authActionBtn.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const name = nameInput.value.trim();
+            if (!email || !password) { alert("Please enter email and password"); return; }
+            if (!isLogin && !name) { alert("Please enter your name"); return; }
+            try {
+                if (isLogin) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    modal.style.display = "none";
+                    showNotification("Logged in successfully!", "success");
+                } else {
+                    const cred = await createUserWithEmailAndPassword(auth, email, password);
+                    await setDoc(doc(db, "users", cred.user.uid), { name, email, createdAt: new Date().toISOString(), role: "user" });
+                    modal.style.display = "none";
+                    showNotification("Account created successfully!", "success");
+                }
+            } catch (error) {
+                let msg = "Authentication failed. ";
+                if (error.code === "auth/email-already-in-use") msg += "Email already in use.";
+                else if (error.code === "auth/invalid-email") msg += "Invalid email.";
+                else if (error.code === "auth/weak-password") msg += "Password must be 6+ characters.";
+                else if (error.code === "auth/user-not-found") msg += "No account with this email.";
+                else if (error.code === "auth/wrong-password") msg += "Incorrect password.";
+                else msg += error.message;
+                alert(msg);
+            }
+        });
+        onAuthStateChanged(auth, async (user) => {
+            updateUI(user);
+            if (user) {
+                try {
+                    const snap = await getDoc(doc(db, "users", user.uid));
+                    const data = snap.exists() ? snap.data() : {};
+                    userName.textContent = data.name || "User";
+                    userEmailNav.textContent = user.email;
+                } catch {
+                    userName.textContent = "User";
+                    userEmailNav.textContent = user.email;
+                }
+            } else {
+                userName.textContent = "Guest";
+                userEmailNav.textContent = "Not logged in";
+            }
+        });
+    </script>
+</body>
+
+</html>

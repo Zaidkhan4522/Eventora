@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Caterers — Eventora</title>
+    <!-- Font Awesome & Google Fonts (same as index) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        /* ----------------------------------------------------------
+           COMPLETE LUXURY PURPLE/PINK THEME – MATCHES INDEX + VENUES
+           Vertical nav slider, fixed background, pink/purple accents, glass cards
+        ------------------------------------------------------------ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #6D28D9;
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.nav-open {
+            overflow: hidden;
+        }
+
+        /* ---------- FIXED BACKGROUND (purple/pink overlay) ---------- */
+        .fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            background:
+                linear-gradient(rgba(109, 40, 217, 0.7), rgba(244, 63, 94, 0.8)),
+                url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(109, 40, 217, 0.2);
+            backdrop-filter: blur(2px);
+            z-index: -1;
+        }
+
+        /* ---------- VERTICAL NAVBAR (updated colors) ---------- */
+        .vertical-nav {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(250, 232, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 30px rgba(109, 40, 217, 0.2);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            padding: 30px 0;
+        }
+
+        .vertical-nav.active {
+            left: 0;
+        }
+
+        .nav-toggle {
+            position: fixed;
+            left: 30px;
+            top: 30px;
+            z-index: 1001;
+            background: #F43F5E;
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(244, 63, 94, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-toggle:hover {
+            background: #F9A8D4;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(244, 63, 94, 0.5);
+        }
+
+        .nav-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-logo a {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #F43F5E;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-logo i {
+            margin-right: 12px;
+            font-size: 28px;
+        }
+
+        /* Top Auth Buttons in Navbar (fixed to right corner) */
+        .nav-top-auth {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: auto !important;
+            height: auto !important;
+            padding: 0 !important;
+        }
+
+        .nav-top-auth-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-top-auth-btn.login {
+            background: #F43F5E;
+            color: white;
+        }
+
+        .nav-top-auth-btn.login:hover {
+            background: #F9A8D4;
+        }
+
+        .nav-top-auth-btn.signup {
+            background: white;
+            color: #6D28D9;
+        }
+
+        .nav-top-auth-btn.signup:hover {
+            background: #F9A8D4;
+        }
+
+        .nav-top-auth-btn.logout {
+            background: #6D28D9;
+            color: white;
+            display: none;
+        }
+
+        .nav-top-auth-btn.logout:hover {
+            background: #F43F5E;
+        }
+
+        /* User info display when logged in (nav top) */
+        .nav-top-user-info {
+            display: none;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            background: rgba(244, 63, 94, 0.1);
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .nav-top-user-info i {
+            font-size: 20px;
+            color: #F43F5E;
+            margin-right: 12px;
+        }
+
+        .nav-top-user-details {
+            flex: 1;
+        }
+
+        .nav-top-user-name {
+            font-weight: 600;
+            color: #6D28D9;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .nav-top-user-email {
+            font-weight: 400;
+            color: #6D28D9;
+            font-size: 12px;
+        }
+
+        .vertical-nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .vertical-nav-links li {
+            margin-bottom: 8px;
+            padding: 0 15px;
+        }
+
+        .vertical-nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: #6D28D9;
+            font-weight: 500;
+            font-size: 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vertical-nav-links a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .vertical-nav-links a:hover {
+            background: rgba(244, 63, 94, 0.15);
+            color: #F43F5E;
+            transform: translateX(8px);
+        }
+
+        .vertical-nav-links a.active {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(244, 63, 94, 0.1));
+            color: #F43F5E;
+            font-weight: 600;
+        }
+
+        .vertical-nav-links a.active:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #F43F5E;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Auth Section at bottom of Navbar */
+        .nav-auth {
+            padding: 30px 20px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(244, 63, 94, 0.1);
+            border-radius: 12px;
+        }
+
+        .user-info i {
+            font-size: 24px;
+            color: #F43F5E;
+            margin-right: 15px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #6D28D9;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .user-email {
+            font-weight: 400;
+            color: #6D28D9;
+            font-size: 13px;
+        }
+
+        .nav-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-auth-btn {
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-auth-btn i {
+            margin-right: 12px;
+        }
+
+        .nav-auth-btn.primary {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+        }
+
+        .nav-auth-btn.primary:hover {
+            background: linear-gradient(135deg, #F9A8D4, #F43F5E);
+            transform: translateY(-3px);
+        }
+
+        .nav-auth-btn.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6D28D9;
+            border: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .nav-auth-btn.secondary:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+        .nav-auth-btn.danger {
+            background: rgba(109, 40, 217, 0.1);
+            color: #6D28D9;
+            display: none;
+        }
+
+        /* Overlay when nav is open on mobile */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(109, 40, 217, 0.7);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-overlay.active {
+            display: block;
+        }
+
+        /* ---------- MAIN CONTENT WRAPPER (shift when nav open) ---------- */
+        .content-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px 80px;
+            position: relative;
+            z-index: 5;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.nav-open .content-wrapper {
+            transform: translateX(280px);
+        }
+
+        @media (max-width: 768px) {
+            body.nav-open .content-wrapper {
+                transform: translateX(0);
+            }
+        }
+
+        /* ---------- TYPOGRAPHY –– PINK, PLAYFAIR ---------- */
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 12px rgba(109, 40, 217, 0.6);
+            animation: fadeInDown 0.9s ease;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: rgba(250, 232, 255, 0.9);
+            margin-bottom: 50px;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            border-bottom: 1px solid rgba(244, 63, 94, 0.5);
+            padding-bottom: 20px;
+            animation: fadeInDown 0.9s 0.1s both;
+        }
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-25px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---------- FILTER SECTION –– ELEGANT GLASS CARD (horizontal) ---------- */
+        .filter-container {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.3);
+            animation: fadeIn 1s 0.2s both;
+        }
+
+        .filter-container label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(109, 40, 217, 0.5);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            transition: all 0.3s ease;
+            font-size: 15px;
+            text-transform: capitalize;
+        }
+
+        .filter-container label:has(input:checked) {
+            background: rgba(244, 63, 94, 0.25);
+            border-color: #F43F5E;
+            color: white;
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.3);
+        }
+
+        .filter-container input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #F43F5E;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* ---------- CATERER GRID –– LUXURY GLASS CARDS ---------- */
+        .caterer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 45px -10px rgba(109, 40, 217, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            animation: cardAppear 0.7s ease;
+        }
+
+        @keyframes cardAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(244, 63, 94, 0.5);
+            box-shadow: 0 40px 70px -10px rgba(244, 63, 94, 0.25);
+        }
+
+        .thumb {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            flex: 0 0 auto;
+            position: relative;
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.8s ease;
+        }
+
+        .card:hover .thumb img {
+            transform: scale(1.15);
+        }
+
+        .card-body {
+            padding: 26px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body h3 {
+            font-family: 'Playfair Display', serif;
+            margin: 0 0 10px;
+            color: white;
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 5px rgba(109, 40, 217, 0.3);
+        }
+
+        .meta {
+            color: rgba(250, 232, 255, 0.8);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: rgba(109, 40, 217, 0.2);
+            padding: 8px 14px;
+            border-radius: 40px;
+            width: fit-content;
+        }
+
+        .meta i {
+            color: #F43F5E;
+            margin-right: 4px;
+        }
+
+        .desc {
+            color: rgba(250, 232, 255, 0.8);
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-bottom: 22px;
+            flex: 1;
+            font-style: italic;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #F43F5E, #F9A8D4);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 18px rgba(244, 63, 94, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn i {
+            font-size: 0.95rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(145deg, #F9A8D4, #F43F5E);
+            transform: translateX(6px);
+            box-shadow: 0 12px 28px rgba(244, 63, 94, 0.45);
+        }
+
+        .btn:hover i {
+            transform: translateX(4px);
+        }
+
+        .btn.secondary {
+            background: rgba(109, 40, 217, 0.2);
+            backdrop-filter: blur(4px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+        }
+
+        .btn.secondary:hover {
+            background: rgba(244, 63, 94, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* empty state */
+        .no-results {
+            text-align: center;
+            padding: 80px 20px;
+            background: rgba(109, 40, 217, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+            border: 1px dashed #F43F5E;
+            grid-column: 1 / -1;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 1000px) {
+            h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vertical-nav {
+                width: 100%;
+                left: -100%;
+            }
+
+            body.nav-open .vertical-nav {
+                left: 0;
+            }
+
+            .nav-toggle {
+                left: 20px;
+                top: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .nav-top-auth {
+                top: 15px;
+                right: 15px;
+            }
+
+            .nav-top-auth-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .content-wrapper {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .filter-container {
+                border-radius: 30px;
+                padding: 20px;
+            }
+
+            .filter-container label {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .caterer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .thumb {
+                height: 200px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #6D28D9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F43F5E;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- FIXED LUXURY BACKGROUND (purple/pink overlay) -->
+    <div class="fixed-bg"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- VERTICAL NAVBAR (full slider) -->
+    <nav class="vertical-nav" id="verticalNav">
+        <div class="nav-logo">
+            <br><br><br>
+            <a href="index.html"><i class="fas fa-heart"></i>Eventora</a>
+        </div>
+
+        <!-- User info display when logged in (top of nav) -->
+        <div class="nav-top-user-info" id="navTopUserInfo">
+            <i class="fas fa-user-circle"></i>
+            <div class="nav-top-user-details">
+                <div class="nav-top-user-name" id="navTopUserName">Guest</div>
+                <div class="nav-top-user-email" id="navTopUserEmail">Not logged in</div>
+            </div>
+        </div>
+
+        <ul class="vertical-nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="Venues.html"><i class="fas fa-building"></i> Venues</a></li>
+            <li><a href="photographers.html"><i class="fas fa-camera"></i> Photographers</a></li>
+            <li><a href="Wedding Caterers.html" class="active"><i class="fas fa-utensils"></i> Caterers</a></li>
+            <li><a href="entertainment.html"><i class="fas fa-music"></i> Entertainment</a></li>
+        </ul>
+
+        <!-- Auth Section at bottom of Navbar -->
+        <div class="nav-auth">
+            <div class="user-info" id="userInfo">
+                <i class="fas fa-user-circle"></i>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Guest</div>
+                    <div class="user-email" id="userEmailNav">Not logged in</div>
+                </div>
+            </div>
+            <div class="nav-auth-buttons">
+                <button id="navLoginBtn" class="nav-auth-btn primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button id="navSignupBtn" class="nav-auth-btn secondary"><i class="fas fa-user-plus"></i> Sign
+                    Up</button>
+                <button id="navLogoutBtn" class="nav-auth-btn danger" style="display: none;"><i
+                        class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Toggle Button -->
+    <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars" id="navToggleIcon"></i>
+    </button>
+
+    <!-- Overlay for mobile -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- TOP RIGHT AUTH BUTTONS (fixed) -->
+   <div class="top-auth">
+
+      <!-- LOGIN BUTTON -->
+      <button id="topLoginBtn" class="login-btn">
+        Login
+      </button>
+
+      <!-- PROFILE SECTION -->
+      <div id="profileContainer">
+
+        <img id="userPhoto" src="" alt="Profile">
+
+        <button id="logoutBtn">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+    <img id="navUserPhoto" width="40" height="40" style="border-radius:50%;">
+
+    <span id="navUserName"></span>
+
+    <button id="logoutBtn">Logout</button>
+
+    </div>
+    </div>
+
+    <!-- MAIN CONTENT WRAPPER (shifts when nav opens) -->
+    <div class="content-wrapper">
+        <!-- PAGE HEADER -->
+        <h1>Wedding Caterers</h1>
+        <p class="page-subtitle">
+            <i class="fas fa-utensils" style="color: #F43F5E; margin-right: 10px;"></i>
+            Tap a caterer to view details & book. Use filters to narrow results.
+        </p>
+
+        <!-- FILTERS – glass horizontal card -->
+        <div class="filter-container" id="filterContainer"></div>
+
+        <!-- CATERER GRID -->
+        <main class="caterer-grid" id="catererGrid" aria-live="polite"></main>
+    </div>
+
+    <!-- subtle footer note -->
+    <div
+        style="text-align: center; margin-top: 20px; padding: 20px; color: rgba(250,232,255,0.4); font-size: 0.85rem; border-top: 1px solid rgba(244,63,94,0.2); max-width: 1400px; margin-left: auto; margin-right: auto;">
+        <i class="fas fa-heart" style="color: #F43F5E;"></i> Weddings begin here – Eventora
+    </div>
+
+    <script>
+        // ============================================
+        // NAVBAR SLIDER FUNCTIONALITY (from index)
+        // ============================================
+        const navToggle = document.getElementById('navToggle');
+        const verticalNav = document.getElementById('verticalNav');
+        const navToggleIcon = document.getElementById('navToggleIcon');
+        const navOverlay = document.getElementById('navOverlay');
+        const body = document.body;
+        const contentWrapper = document.querySelector('.content-wrapper');
+
+        navToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            verticalNav.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            body.classList.toggle('nav-open');
+            navToggleIcon.className = verticalNav.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        navOverlay.addEventListener('click', function () {
+            verticalNav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            body.classList.remove('nav-open');
+            navToggleIcon.className = 'fas fa-bars';
+        });
+
+        document.addEventListener('click', function (event) {
+            const isMobile = window.innerWidth <= 768;
+            if (!isMobile && verticalNav.classList.contains('active') &&
+                !verticalNav.contains(event.target) && !navToggle.contains(event.target)) {
+                verticalNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                body.classList.remove('nav-open');
+                navToggleIcon.className = 'fas fa-bars';
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && verticalNav.classList.contains('active')) {
+                verticalNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                body.classList.remove('nav-open');
+                navToggleIcon.className = 'fas fa-bars';
+            }
+        });
+
+        document.querySelectorAll('.vertical-nav-links a').forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    verticalNav.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    body.classList.remove('nav-open');
+                    navToggleIcon.className = 'fas fa-bars';
+                }
+            });
+        });
+
+        // ============================================
+        // CATERERS DATA & RENDERING (preserved, restyled)
+        // ============================================
+        const caterers = [
+            { id: 'royal-feast', name: 'Royal Feast', location: 'Mumbai, Maharashtra', types: ['vegetarian', 'premium'], image: 'wedding-imgs/caterers/V1-1.png', desc: 'Premium vegetarian catering for lavish weddings.' },
+            { id: 'spice-kitchen', name: 'Spice Kitchen', location: 'Delhi', types: ['non-veg', 'budget'], image: 'wedding-imgs/caterers/V2-1.png', desc: 'Affordable non-vegetarian catering with authentic flavors.' },
+            { id: 'heritage-cuisine', name: 'Heritage Cuisine', location: 'Jaipur', types: ['vegetarian', 'premium'], image: 'wedding-imgs/caterers/V1-2.png', desc: 'Royal Rajasthani cuisine for your wedding guests.' },
+            { id: 'garden-treats', name: 'Garden Treats', location: 'Pune', types: ['vegetarian', 'budget'], image: 'wedding-imgs/caterers/V1-3.png', desc: 'Fresh and affordable vegetarian menus for garden weddings.' },
+            { id: 'banquet-bites', name: 'Banquet Bites', location: 'Bangalore', types: ['non-veg', 'premium'], image: 'wedding-imgs/caterers/V2-2.png', desc: 'Premium multi-cuisine catering for large banquets.' },
+            { id: 'taste-of-goa', name: 'Taste of Goa', location: 'Goa', types: ['seafood', 'premium'], image: 'wedding-imgs/caterers/V2-3.png', desc: 'Fresh Goan seafood and coastal cuisine for weddings.' },
+            { id: 'delightful-dishes', name: 'Delightful Dishes', location: 'Chennai', types: ['vegetarian', 'budget'], image: 'wedding-imgs/caterers/V1-4.png', desc: 'Budget-friendly South Indian vegetarian catering.' },
+            { id: 'royal-bites', name: 'Royal Bites', location: 'Hyderabad', types: ['non-veg', 'premium'], image: 'wedding-imgs/caterers/V2-4.png', desc: 'Hyderabadi biryani and royal dishes for weddings.' },
+            { id: 'flavor-factory', name: 'Flavor Factory', location: 'Ahmedabad', types: ['vegetarian', 'budget'], image: 'wedding-imgs/caterers/V1-5.png', desc: 'Affordable vegetarian menus with rich flavors.' },
+            { id: 'celebration-catering', name: 'Celebration Catering', location: 'Kolkata', types: ['non-veg', 'premium'], image: 'wedding-imgs/caterers/V2-5.png', desc: 'Premium Bengali and continental wedding menus.' },
+            { id: 'spice-trove', name: 'Spice Trove', location: 'Mumbai', types: ['non-veg', 'budget'], image: 'wedding-imgs/caterers/V2-6.png', desc: 'Affordable, flavorful non-veg dishes for weddings.' },
+            { id: 'golden-palate', name: 'Golden Palate', location: 'Delhi', types: ['vegetarian', 'premium'], image: 'wedding-imgs/caterers/V1-6.png', desc: 'Premium vegetarian menus with international fusion.' },
+            { id: 'heritage-bites', name: 'Heritage Bites', location: 'Jaipur', types: ['non-veg', 'premium'], image: 'wedding-imgs/caterers/V2-7.png', desc: 'Royal Rajasthani non-veg dishes with authenticity.' },
+            { id: 'garden-flavors', name: 'Garden Flavors', location: 'Pune', types: ['vegetarian', 'budget'], image: 'wedding-imgs/caterers/V1-7.png', desc: 'Fresh, budget-friendly vegetarian catering in Pune.' },
+            { id: 'banquet-royals', name: 'Banquet Royals', location: 'Bangalore', types: ['non-veg', 'premium'], image: 'wedding-imgs/caterers/V2-8.png', desc: 'High-end multi-cuisine catering for grand banquets.' },
+            { id: 'taste-garden', name: 'Taste Garden', location: 'Goa', types: ['vegetarian', 'budget'], image: 'wedding-imgs/caterers/V1-8.png', desc: 'Affordable vegetarian menus for beach weddings.' },
+            { id: 'delightful-bites', name: 'Delightful Bites', location: 'Chennai', types: ['non-veg', 'budget'], image: 'wedding-imgs/caterers/V2-9.png', desc: 'Budget non-veg South Indian catering.' },
+            { id: 'royal-flavors', name: 'Royal Flavors', location: 'Hyderabad', types: ['vegetarian', 'premium'], image: 'wedding-imgs/caterers/V1-9.png', desc: 'Premium vegetarian menus with rich heritage flavors.' },
+            { id: 'flavor-haven', name: 'Flavor Haven', location: 'Ahmedabad', types: ['non-veg', 'budget'], image: 'wedding-imgs/caterers/V2-3.png', desc: 'Affordable non-veg dishes with authentic flavors.' },
+            { id: 'celebration-palace', name: 'Celebration Palace', location: 'Kolkata', types: ['vegetarian', 'premium'], image: 'wedding-imgs/caterers/V1-10.png', desc: 'Premium vegetarian wedding menus with elegance.' }
+        ];
+
+        const grid = document.getElementById('catererGrid');
+        const filterContainer = document.getElementById('filterContainer');
+
+        // Create filter buttons (radio style)
+        const allTypes = ['all', ...new Set(caterers.flatMap(c => c.types))];
+        allTypes.forEach(type => {
+            const label = document.createElement('label');
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'filter';
+            input.value = type;
+            if (type === 'all') input.checked = true;
+            input.addEventListener('change', filterCaterers);
+            label.appendChild(input);
+            label.appendChild(document.createTextNode(' ' + type.replace(/-/g, ' ')));
+            filterContainer.appendChild(label);
+        });
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+
+        function createCard(c) {
+            return `
+            <article class="card" role="article" onclick="openCaterer('${c.id}')">
+                <div class="thumb" aria-hidden="true">
+                    <img loading="lazy" src="${c.image}" alt="${escapeHtml(c.name)}">
+                </div>
+                <div class="card-body">
+                    <h3>${escapeHtml(c.name)}</h3>
+                    <div class="meta"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(c.location)} • ${c.types.join(', ')}</div>
+                    <div class="desc">“${escapeHtml(c.desc)}”</div>
+                    <div class="actions">
+                        <button class="btn" onclick="event.stopPropagation(); openCaterer('${c.id}')"><i class="fas fa-eye"></i> View & Book</button>
+                        <button class="btn secondary" onclick="event.stopPropagation(); openQuickInfo('${c.id}')"><i class="fas fa-info-circle"></i> Quick Info</button>
+                    </div>
+                </div>
+            </article>`;
+        }
+
+        function render(items) {
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="no-results"><i class="fas fa-utensils" style="color: #F43F5E; margin-right: 10px;"></i> No caterers found. Try another filter.</div>`;
+                return;
+            }
+            grid.innerHTML = items.map(createCard).join('');
+        }
+
+        function filterCaterers() {
+            const selected = document.querySelector('input[name="filter"]:checked').value;
+            if (selected === "all") { render(caterers); return; }
+            const filtered = caterers.filter(c => c.types.includes(selected));
+            render(filtered);
+        }
+
+        window.openCaterer = function (id) {
+            window.location.href = `caterer-details.html?caterer=${encodeURIComponent(id)}`;
+        };
+
+        window.openQuickInfo = function (id) {
+            const c = caterers.find(x => x.id === id);
+            if (!c) return;
+            alert(`${c.name}\n\nLocation: ${c.location}\n\n${c.desc}`);
+        };
+
+        // Initial render
+        render(caterers);
+    </script>
+</body>
+
+</html>

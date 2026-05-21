@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Caterer Details</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;400;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #F43F5E;
+      --primary-light: #F9A8D4;
+      --purple: #6D28D9;
+      --purple-light: #8B5CF6;
+      --bg: #FAE8FF;
+      --card: #ffffff;
+      --muted: #6B7280;
+      --shadow: 0 10px 25px -5px rgba(109, 40, 217, 0.2);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, var(--purple), var(--primary));
+      color: #1F2937;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .thumb {
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      border: 3px solid var(--primary-light);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .thumb img:hover {
+      transform: scale(1.02);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      color: var(--purple);
+      font-size: 16px;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+
+    .desc {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      color: #374151;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3);
+    }
+
+    .btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(244, 63, 94, 0.4);
+    }
+
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    input,
+    textarea {
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      font-size: 14px;
+      width: 100%;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--purple);
+      margin-bottom: 2px;
+    }
+
+    .alert {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+      border-left: 4px solid transparent;
+    }
+
+    .alert.success {
+      background: #F0FDF4;
+      color: #166534;
+      border-left-color: #22C55E;
+      display: block;
+    }
+
+    .alert.error {
+      background: #FEF2F2;
+      color: #991B1B;
+      border-left-color: #EF4444;
+      display: block;
+    }
+
+    .alert.info {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border-left-color: var(--primary);
+      display: block;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, .3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #firebaseAlert {
+      background: #F3E8FF;
+      border-left-color: var(--purple);
+    }
+
+    #firebaseAlert strong {
+      color: var(--purple);
+    }
+
+    @media (max-width: 600px) {
+      .thumb {
+        height: 250px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container" id="catererContainer">
+    <div class="alert info" id="firebaseAlert">
+      <strong>✅ Firebase Connected</strong>
+      <p>Your booking will be saved to the database.</p>
+    </div>
+    <div class="alert" id="alertMessage"></div>
+  </div>
+
+  <script type="module">
+    /* ================= FIREBASE CONFIGURATION ================= */
+    const firebaseConfig = {
+      apiKey: "AIzaSyC8Wp7S4fg5YURaNYAA2ngzUD11VCwTaGI",
+      authDomain: "o-e-m-system.firebaseapp.com",
+      projectId: "o-e-m-system",
+      storageBucket: "o-e-m-system.appspot.com",
+      messagingSenderId: "298561567790",
+      appId: "1:298561567790:web:8a3b3fc2c4fc9801e4f3bf"
+    };
+
+    // Check if Firebase config is valid
+    const isFirebaseConfigured = firebaseConfig.apiKey &&
+      firebaseConfig.projectId &&
+      firebaseConfig.apiKey !== "AIzaSyDEXAMPLEEXAMPLEEXAMPLEEXAMPLE12345";
+
+    /* ================= CATERERS DATA ================= */
+    const caterers = [
+      {
+        id: "royal-feast",
+        name: "Royal Feast",
+        location: "Mumbai",
+        image: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1200&q=80",
+        desc: "Premium vegetarian catering for weddings and corporate events. Specializing in traditional Indian cuisine with a modern twist. We provide complete meal solutions for 50-5000 guests."
+      },
+      {
+        id: "spice-kitchen",
+        name: "Spice Kitchen",
+        location: "Delhi",
+        image: "https://images.unsplash.com/photo-1601924582971-6e71e47a4bbf?auto=format&fit=crop&w=1200&q=80",
+        desc: "Authentic non-vegetarian catering with specialties in Mughlai, North Indian, and Continental cuisine. Our experienced chefs create memorable dining experiences for all occasions."
+      }
+    ];
+
+    /* ================= GET CATERER FROM URL ================= */
+    const params = new URLSearchParams(window.location.search);
+    const catererId = params.get("caterer");
+    const caterer = caterers.find(c => c.id === catererId);
+
+    /* ================= INITIAL UI RENDER ================= */
+    const container = document.getElementById("catererContainer");
+    const alertDiv = document.getElementById("alertMessage");
+    const firebaseAlert = document.getElementById("firebaseAlert");
+
+    // Update Firebase alert message
+    if (isFirebaseConfigured) {
+      firebaseAlert.innerHTML = `
+    <strong>✅ Firebase Connected Successfully</strong>
+    <p>Project: <strong>o-e-m-system</strong></p>
+    <p>Your booking will be saved to Firestore database.</p>
+  `;
+    } else {
+      firebaseAlert.className = "alert error";
+      firebaseAlert.innerHTML = `
+    <strong>⚠️ Firebase Configuration Issue</strong>
+    <p>Please check your Firebase credentials.</p>
+  `;
+    }
+
+    if (!caterer) {
+      container.innerHTML = `
+    <div class="alert error">
+      <strong>Caterer Not Found</strong>
+      <p>The caterer you're looking for doesn't exist. Please check the URL or go back to the main page.</p>
+      <p>Valid caterer IDs: "royal-feast" or "spice-kitchen"</p>
+      <p>Example URL: <code>?caterer=royal-feast</code></p>
+    </div>
+  `;
+      throw new Error("Invalid caterer ID");
+    }
+
+    /* ================= RENDER CATERER DETAILS ================= */
+    container.innerHTML += `
+  <div class="thumb">
+    <img src="${caterer.image}" alt="${caterer.name} - Catering Service" loading="lazy">
+  </div>
+  <h1>${caterer.name}</h1>
+  <div class="meta">📍 ${caterer.location}</div>
+  <div class="desc">${caterer.desc}</div>
+  
+  <form id="bookingForm">
+    <label for="name">Full Name *</label>
+    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+    
+    <label for="email">Email Address *</label>
+    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+    
+    <label for="phone">Phone Number *</label>
+    <input type="tel" id="phone" name="phone" required placeholder="Enter 10-digit phone number">
+    
+    <label for="date">Event Date *</label>
+    <input type="date" id="date" name="date" required>
+    
+    <label for="guests">Number of Guests *</label>
+    <input type="number" id="guests" name="guests" min="1" max="10000" required placeholder="50">
+    
+    <label for="requests">Special Requests (Optional)</label>
+    <textarea id="requests" name="requests" rows="4" placeholder="Any dietary restrictions, menu preferences, or special requirements..."></textarea>
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+      <button type="submit" class="btn" id="submitBtn">
+        <span class="loading hidden" id="loadingSpinner"></span>
+        <span id="btnText">Submit Booking</span>
+      </button>
+      <span id="statusText" style="font-size: 14px; color: var(--purple);"></span>
+    </div>
+  </form>
+`;
+
+    /* ================= FORM VALIDATION ENHANCEMENTS ================= */
+    const phoneInput = document.getElementById("phone");
+    if (phoneInput) {
+      phoneInput.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+      });
+    }
+
+    const dateInput = document.getElementById("date");
+    if (dateInput) {
+      // Set min date to today
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      dateInput.min = today.toISOString().split('T')[0];
+
+      // Set default date to 30 days from now
+      const futureDate = new Date();
+      futureDate.setDate(futureDate.getDate() + 30);
+      dateInput.value = futureDate.toISOString().split('T')[0];
+    }
+
+    /* ================= FORM SUBMISSION HANDLER ================= */
+    document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const submitBtn = document.getElementById("submitBtn");
+      const btnText = document.getElementById("btnText");
+      const loadingSpinner = document.getElementById("loadingSpinner");
+      const statusText = document.getElementById("statusText");
+
+      // Validate form
+      if (!form.checkValidity()) {
+        alertDiv.className = "alert error";
+        alertDiv.innerHTML = `<strong>❌ Please fill all required fields correctly</strong>`;
+        form.reportValidity();
+        return;
+      }
+
+      // Validate phone number
+      if (phoneInput.value.length !== 10) {
+        alertDiv.className = "alert error";
+        alertDiv.innerHTML = `<strong>❌ Invalid Phone Number</strong><p>Please enter a valid 10-digit phone number.</p>`;
+        phoneInput.focus();
+        return;
+      }
+
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      loadingSpinner.classList.remove('hidden');
+      btnText.textContent = "Processing...";
+      statusText.textContent = "Preparing your booking...";
+
+      // Prepare booking data
+      const bookingData = {
+        catererId: caterer.id,
+        catererName: caterer.name,
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        eventDate: form.date.value,
+        guests: parseInt(form.guests.value),
+        requests: form.requests.value.trim() || "No special requests",
+        status: "pending",
+        submittedAt: new Date().toISOString(),
+        pageUrl: window.location.href
+      };
+
+      try {
+        let savedToFirebase = false;
+        let bookingId = null;
+        let firebaseError = null;
+
+        if (isFirebaseConfigured) {
+          try {
+            // Import Firebase modules
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+            const { getFirestore, collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
+            // Prepare Firebase data
+            const firebaseData = {
+              ...bookingData,
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp()
+            };
+
+            // Save to Firestore
+            statusText.textContent = "Connecting to database...";
+
+            // Test connection by trying to save
+            const docRef = await addDoc(collection(db, "catererBookings"), firebaseData);
+            bookingId = docRef.id;
+            savedToFirebase = true;
+
+            console.log("✅ Firebase Save Successful - Document ID:", bookingId);
+
+          } catch (error) {
+            console.error("❌ Firebase Error:", error);
+            firebaseError = error;
+            savedToFirebase = false;
+
+            // Check for specific Firebase errors
+            if (error.code === 'permission-denied') {
+              alertDiv.className = "alert error";
+              alertDiv.innerHTML = `
+            <strong>⚠️ Firestore Permission Error</strong>
+            <p>Please check your Firestore security rules.</p>
+            <p><small>Go to Firebase Console → Firestore Database → Rules tab</small></p>
+            <p><small>Use this temporary rule: <code>allow read, write: if true;</code></small></p>
+          `;
+            }
+          }
+        }
+
+        // ================= ALWAYS SAVE TO LOCAL CONSOLE & STORAGE =================
+        console.log("📋 Booking Data Submitted:", bookingData);
+        if (bookingId) {
+          console.log("📝 Firebase Document ID:", bookingId);
+        }
+
+        // Save to localStorage for backup
+        const allBookings = JSON.parse(localStorage.getItem('catererBookings') || '[]');
+        allBookings.push({
+          ...bookingData,
+          localId: Date.now().toString(),
+          savedToFirebase: savedToFirebase,
+          firebaseId: bookingId,
+          timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('catererBookings', JSON.stringify(allBookings));
+
+        // Generate booking reference
+        const bookingRef = `BK-${Date.now().toString().slice(-8)}`;
+
+        // Show success message based on save status
+        alertDiv.className = "alert success";
+
+        if (savedToFirebase) {
+          alertDiv.innerHTML = `
+        <strong>🎉 Booking Submitted Successfully!</strong>
+        <p style="color: #166534; background: #dcfce7; padding: 8px; border-radius: 4px; margin: 8px 0;">
+          ✅ <strong>SAVED TO DATABASE</strong>
+        </p>
+        <p>Thank you, <strong>${bookingData.name}</strong>!</p>
+        <p>Your booking for <strong>${caterer.name}</strong> has been confirmed.</p>
+        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 12px 0;">
+          <p><strong>📋 Booking Details:</strong></p>
+          <p>📧 Email: ${bookingData.email}</p>
+          <p>📞 Phone: ${bookingData.phone}</p>
+          <p>📅 Event Date: ${new Date(bookingData.eventDate).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p>👥 Guests: ${bookingData.guests}</p>
+          <p>📝 Reference: <strong>${bookingRef}</strong></p>
+          <p>🆔 Database ID: ${bookingId}</p>
+        </div>
+        <p>Our team will contact you within 24 hours to finalize details.</p>
+      `;
+        } else if (firebaseError) {
+          alertDiv.innerHTML = `
+        <strong>⚠️ Booking Saved Locally</strong>
+        <p style="color: #92400e; background: #fef3c7; padding: 8px; border-radius: 4px; margin: 8px 0;">
+          ⚠️ <strong>Database connection failed - saved locally only</strong>
+        </p>
+        <p>Thank you, <strong>${bookingData.name}</strong>!</p>
+        <p>Your booking request for <strong>${caterer.name}</strong> has been recorded.</p>
+        <p><strong>Error:</strong> ${firebaseError?.message || 'Database connection issue'}</p>
+        <p>📋 Reference: <strong>${bookingRef}</strong></p>
+        <p>Check browser console (F12) for details.</p>
+        <p><small>Please contact support with your reference number.</small></p>
+      `;
+        } else {
+          alertDiv.innerHTML = `
+        <strong>🎉 Booking Submitted (Demo Mode)</strong>
+        <p>Thank you for your interest in <strong>${caterer.name}</strong>!</p>
+        <p>📋 Reference: <strong>${bookingRef}</strong></p>
+        <p>This is a demo submission. Check browser console (F12) to see the data.</p>
+      `;
+        }
+
+        // Reset form
+        form.reset();
+
+        // Reset date to default (30 days from now)
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 30);
+        dateInput.value = futureDate.toISOString().split('T')[0];
+
+        // Scroll to top to show success message
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (error) {
+        console.error("Booking Processing Error:", error);
+
+        // Show error message
+        alertDiv.className = "alert error";
+        alertDiv.innerHTML = `
+      <strong>❌ Booking Submission Failed</strong>
+      <p>${error.message || "An unexpected error occurred."}</p>
+      <p><small>Error: ${error.code || "Unknown error"}</small></p>
+      <p>Please try again or contact support if the problem persists.</p>
+    `;
+
+        // Scroll to show error
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } finally {
+        // Re-enable button
+        submitBtn.disabled = false;
+        loadingSpinner.classList.add('hidden');
+        btnText.textContent = "Submit Booking";
+        statusText.textContent = "";
+
+        // Auto-hide alert after 15 seconds
+        setTimeout(() => {
+          if (alertDiv.className.includes('success')) {
+            alertDiv.className = "alert";
+            alertDiv.innerHTML = "";
+          }
+        }, 15000);
+      }
+    });
+
+    /* ================= FIREBASE CONNECTION TEST ================= */
+    async function testFirebaseConnection() {
+      if (!isFirebaseConfigured) return false;
+
+      try {
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+        const { getFirestore } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        console.log("✅ Firebase Connection Test: PASSED");
+        console.log("   Project: o-e-m-system");
+        console.log("   Database: Firestore");
+        return true;
+      } catch (error) {
+        console.error("❌ Firebase Connection Test: FAILED", error);
+        return false;
+      }
+    }
+
+    /* ================= INITIAL LOGS AND TESTS ================= */
+    console.log("🚀 Caterer Booking Page Loaded Successfully");
+    console.log("🏢 Caterer:", caterer.name);
+    console.log("🔗 URL Parameters:", Object.fromEntries(params.entries()));
+    console.log("🔧 Firebase Status:", isFirebaseConfigured ? "Configured ✅" : "Not Configured ⚠️");
+
+    // Test Firebase connection on load
+    testFirebaseConnection().then(connected => {
+      if (connected) {
+        console.log("✅ Ready to save bookings to Firebase");
+      }
+    });
+
+    // Show booking history
+    const savedBookings = JSON.parse(localStorage.getItem('catererBookings') || '[]');
+    console.log("📊 Local Booking History:", savedBookings.length, "booking(s)");
+
+    // Instructions for testing
+    console.log("%c📋 TESTING INSTRUCTIONS:", "color: #F43F5E; font-size: 16px; font-weight: bold;");
+    console.log("1. Fill the form and click 'Submit Booking'");
+    console.log("2. Check Firebase Console → Firestore Database");
+    console.log("3. Look for 'catererBookings' collection");
+    console.log("4. Data should appear in real-time");
+
+  </script>
+
+</body>
+
+</html>

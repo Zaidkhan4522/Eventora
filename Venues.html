@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventora - Find Your Dream Wedding Venues</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-color: #6D28D9;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.nav-open {
+            overflow: hidden;
+        }
+
+        /* Fixed Background Image - Updated overlay to purple/pink gradient */
+        .fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background:
+                linear-gradient(rgba(109, 40, 217, 0.65), rgba(244, 63, 94, 0.75)),
+                url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            background-attachment: fixed;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.nav-open .content-wrapper {
+            transform: translateX(280px);
+        }
+
+        @media (max-width: 768px) {
+            body.nav-open .content-wrapper {
+                transform: translateX(0);
+            }
+        }
+
+        /* Vertical Navbar - Updated colors */
+        .vertical-nav {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: rgba(250, 232, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 0 30px rgba(109, 40, 217, 0.2);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            padding: 30px 0;
+        }
+
+        .vertical-nav.active {
+            left: 0;
+        }
+
+        .nav-toggle {
+            position: fixed;
+            left: 30px;
+            top: 30px;
+            z-index: 1001;
+            background: #F43F5E;
+            color: white;
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(244, 63, 94, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-toggle:hover {
+            background: #F9A8D4;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(244, 63, 94, 0.5);
+        }
+
+        .nav-logo {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-logo a {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #F43F5E;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-logo i {
+            margin-right: 12px;
+            font-size: 28px;
+        }
+
+        /* Top Auth Buttons in Navbar */
+        .nav-top-auth {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .nav-top-auth-btn {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-top-auth-btn i {
+            font-size: 14px;
+        }
+
+        .nav-top-auth-btn.login {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            box-shadow: 0 3px 10px rgba(244, 63, 94, 0.25);
+        }
+
+        .nav-top-auth-btn.login:hover {
+            background: linear-gradient(135deg, #F9A8D4, #F43F5E);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 63, 94, 0.35);
+        }
+
+        .nav-top-auth-btn.signup {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6D28D9;
+            border: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .nav-top-auth-btn.signup:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.1);
+        }
+
+        .nav-top-auth-btn.logout {
+            background: rgba(109, 40, 217, 0.1);
+            color: #6D28D9;
+            border: 1px solid rgba(109, 40, 217, 0.2);
+            display: none;
+        }
+
+        .nav-top-auth-btn.logout:hover {
+            background: rgba(109, 40, 217, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* User info display when logged in */
+        .nav-top-user-info {
+            display: none;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            background: rgba(244, 63, 94, 0.1);
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-top-user-info i {
+            font-size: 20px;
+            color: #F43F5E;
+            margin-right: 12px;
+        }
+
+        .nav-top-user-details {
+            flex: 1;
+        }
+
+        .nav-top-user-name {
+            font-weight: 600;
+            color: #6D28D9;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .nav-top-user-email {
+            font-weight: 400;
+            color: #6D28D9;
+            font-size: 12px;
+            word-break: break-word;
+        }
+
+        .vertical-nav-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .vertical-nav-links li {
+            margin-bottom: 8px;
+            padding: 0 15px;
+        }
+
+        .vertical-nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            text-decoration: none;
+            color: #6D28D9;
+            font-weight: 500;
+            font-size: 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vertical-nav-links a i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .vertical-nav-links a:hover {
+            background: rgba(244, 63, 94, 0.15);
+            color: #F43F5E;
+            transform: translateX(8px);
+        }
+
+        .vertical-nav-links a:hover i {
+            transform: scale(1.1);
+        }
+
+        .vertical-nav-links a.active {
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(244, 63, 94, 0.1));
+            color: #F43F5E;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);
+        }
+
+        .vertical-nav-links a.active:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #F43F5E;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Auth Section at bottom of Navbar */
+        .nav-auth {
+            padding: 30px 20px 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(244, 63, 94, 0.1);
+            border-radius: 12px;
+        }
+
+        .user-info i {
+            font-size: 24px;
+            color: #F43F5E;
+            margin-right: 15px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #6D28D9;
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .user-email {
+            font-weight: 400;
+            color: #6D28D9;
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+        .nav-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-auth-btn {
+            padding: 16px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-auth-btn i {
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .nav-auth-btn.primary {
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: white;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.25);
+        }
+
+        .nav-auth-btn.primary:hover {
+            background: linear-gradient(135deg, #F9A8D4, #F43F5E);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35);
+        }
+
+        .nav-auth-btn.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6D28D9;
+            border: 1px solid rgba(109, 40, 217, 0.1);
+        }
+
+        .nav-auth-btn.secondary:hover {
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(109, 40, 217, 0.1);
+        }
+
+        .nav-auth-btn.danger {
+            background: rgba(109, 40, 217, 0.1);
+            color: #6D28D9;
+            border: 1px solid rgba(109, 40, 217, 0.2);
+        }
+
+        .nav-auth-btn.danger:hover {
+            background: rgba(109, 40, 217, 0.15);
+            transform: translateY(-3px);
+        }
+
+        /* Main Content - Updated colors */
+        .hero-section {
+            text-align: center;
+            padding: 150px 20px 100px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(109, 40, 217, 0.5);
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(250, 232, 255, 0.9);
+            margin-bottom: 50px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 1200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.2);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #F43F5E;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: #F43F5E;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .filter-group select option {
+            background: #6D28D9;
+            color: white;
+        }
+
+        /* VENUES LISTINGS */
+        .venues-hero {
+            text-align: center;
+            padding: 100px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .venues-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(109, 40, 217, 0.5);
+        }
+
+        .venues-hero p {
+            font-size: 1.2rem;
+            color: rgba(250, 232, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Venue Listings Container */
+        #venueList {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Individual Listing */
+        .listing {
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(109, 40, 217, 0.2);
+        }
+
+        .listing:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(244, 63, 94, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .hex {
+            width: 160px;
+            height: 160px;
+            clip-path: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .hex img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .listing:hover .hex img {
+            transform: scale(1.1);
+        }
+
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .venue-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin: 0;
+            color: white;
+        }
+
+        .location {
+            color: rgba(250, 232, 255, 0.8);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gallery {
+            display: flex;
+            gap: 12px;
+        }
+
+        .gallery div {
+            flex: 1;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.08);
+        }
+
+        .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 15px;
+        }
+
+        .price-block {
+            font-weight: 700;
+            color: #F43F5E;
+            font-size: 18px;
+        }
+
+        .desc {
+            font-size: 15px;
+            color: rgba(250, 232, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        .view-btn {
+            margin-top: 15px;
+            display: inline-block;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .view-btn:hover {
+            background: linear-gradient(135deg, #F9A8D4, #F43F5E);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(244, 63, 94, 0.3);
+        }
+
+        /* Top Right Auth Buttons - Updated colors */
+        .nav-top-auth {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: auto !important;
+            height: auto !important;
+            padding: 0 !important;
+        }
+
+        .nav-top-auth-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-top-auth-btn.login {
+            background: #F43F5E;
+            color: white;
+        }
+
+        .nav-top-auth-btn.login:hover {
+            background: #F9A8D4;
+        }
+
+        .nav-top-auth-btn.signup {
+            background: white;
+            color: #6D28D9;
+        }
+
+        .nav-top-auth-btn.signup:hover {
+            background: #F9A8D4;
+        }
+
+        .nav-top-auth-btn.logout {
+            background: #6D28D9;
+            color: white;
+        }
+
+        .nav-top-auth-btn.logout:hover {
+            background: #F43F5E;
+        }
+
+        /* Footer - Updated colors */
+        footer {
+            background: rgba(109, 40, 217, 0.9);
+            padding: 70px 0 30px;
+            position: relative;
+            margin-top: 100px;
+            border-top: 1px solid rgba(250, 232, 255, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .footer-column h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #F43F5E;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #F43F5E;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 18px;
+        }
+
+        .footer-links a {
+            color: rgba(250, 232, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+
+        .footer-links a i {
+            margin-right: 12px;
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .footer-links a:hover {
+            color: #F43F5E;
+            transform: translateX(8px);
+        }
+
+        .social-icons {
+            display: flex;
+            margin-top: 25px;
+            gap: 15px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(250, 232, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .social-icons a:hover {
+            background: #F43F5E;
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 0 10px 20px rgba(244, 63, 94, 0.3);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(250, 232, 255, 0.1);
+            color: rgba(250, 232, 255, 0.5);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px 0;
+        }
+
+        .copyright a {
+            color: #F43F5E;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .copyright a:hover {
+            color: #F9A8D4;
+            text-decoration: underline;
+        }
+
+        /* Auth Modal - Updated colors */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(109, 40, 217, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-box {
+            background: rgba(250, 232, 255, 0.95);
+            padding: 45px;
+            width: 420px;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(109, 40, 217, 0.3);
+            position: relative;
+            animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .auth-box .close {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            cursor: pointer;
+            font-size: 24px;
+            color: #6D28D9;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .auth-box .close:hover {
+            color: #F43F5E;
+            background: rgba(244, 63, 94, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .auth-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #6D28D9;
+            text-align: center;
+        }
+
+        .auth-box p.subtitle {
+            text-align: center;
+            color: #6D28D9;
+            margin-bottom: 35px;
+            font-size: 16px;
+        }
+
+        .auth-box input {
+            width: 100%;
+            padding: 18px 20px;
+            margin: 15px 0;
+            border: 2px solid #F9A8D4;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .auth-box input:focus {
+            border-color: #F43F5E;
+            box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.15);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .auth-box button {
+            width: 100%;
+            padding: 18px;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #F43F5E, #F9A8D4);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3);
+        }
+
+        .auth-box button:hover {
+            background: linear-gradient(135deg, #F9A8D4, #F43F5E);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(244, 63, 94, 0.4);
+        }
+
+        #toggleAuth {
+            text-align: center;
+            margin-top: 30px;
+            color: #6D28D9;
+            font-size: 15px;
+        }
+
+        #toggleAuth span {
+            color: #F43F5E;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        #toggleAuth span:hover {
+            color: #F9A8D4;
+        }
+
+        #toggleAuth span:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #F43F5E;
+            transition: width 0.3s ease;
+        }
+
+        #toggleAuth span:hover:after {
+            width: 100%;
+        }
+
+        /* Overlay when nav is open on mobile */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(109, 40, 217, 0.7);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-overlay.active {
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+
+            .venues-hero h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+
+            .venues-hero h1 {
+                font-size: 3rem;
+            }
+
+            .venues-hero p {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .vertical-nav {
+                width: 100%;
+                left: -100%;
+            }
+
+            body.nav-open .vertical-nav {
+                left: 0;
+            }
+
+            .nav-toggle {
+                left: 20px;
+                top: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .content-wrapper {
+                padding: 30px 15px;
+            }
+
+            .hero-section {
+                padding: 120px 15px 80px;
+            }
+
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .venues-hero {
+                padding: 80px 15px 40px;
+            }
+
+            .venues-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .listing {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .hex {
+                width: 200px;
+                height: 200px;
+                clip-path: none;
+                border-radius: 15px;
+            }
+
+            .gallery div {
+                height: 100px;
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
+
+            .auth-box {
+                width: 90%;
+                max-width: 400px;
+                padding: 35px;
+            }
+
+            .nav-top-auth {
+                top: 15px;
+                right: 15px;
+            }
+
+            .nav-top-auth-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.4rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .venues-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .venues-hero p {
+                font-size: 1rem;
+            }
+
+            .venue-name {
+                font-size: 1.6rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .nav-toggle {
+                left: 15px;
+                top: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fixed Background Image - Updated gradient -->
+    <div class="fixed-bg"></div>
+
+    <!-- Nav Overlay for Mobile -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Vertical Navbar -->
+    <nav class="vertical-nav" id="verticalNav">
+        <div class="nav-logo">
+            <br>
+            <a href="index.html"><i class="fas fa-heart"></i>Eventora</a>
+        </div>
+
+        <!-- User info display when logged in -->
+        <div class="nav-top-user-info" id="navTopUserInfo">
+            <i class="fas fa-user-circle"></i>
+            <div class="nav-top-user-details">
+                <div class="nav-top-user-name" id="navTopUserName">Guest</div>
+                <div class="nav-top-user-email" id="navTopUserEmail">Not logged in</div>
+            </div>
+        </div>
+
+        <ul class="vertical-nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="Venues.html" class="active"><i class="fas fa-building"></i> Venues</a></li>
+            <li><a href="photographers.html"><i class="fas fa-camera"></i> Photographers</a></li>
+            <li><a href="Wedding Caterers.html"><i class="fas fa-utensils"></i> Caterers</a></li>
+            <li><a href="entertainment.html"><i class="fas fa-music"></i> Entertainment</a></li>
+        </ul>
+
+        <!-- Auth Section at bottom of Navbar -->
+        <div class="nav-auth">
+            <div class="user-info" id="userInfo">
+                <i class="fas fa-user-circle"></i>
+                <div class="user-details">
+                    <div class="user-name" id="userName">Guest</div>
+                    <div class="user-email" id="userEmailNav">Not logged in</div>
+                </div>
+            </div>
+
+            <div class="nav-auth-buttons">
+                <button id="navLoginBtn" class="nav-auth-btn primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button id="navSignupBtn" class="nav-auth-btn secondary">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+                <button id="navLogoutBtn" class="nav-auth-btn danger" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Nav Toggle Button -->
+    <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars" id="navToggleIcon"></i>
+    </button>
+
+    <!-- Top Right Auth Buttons - Updated colors -->
+   <div class="top-auth">
+
+      <!-- LOGIN BUTTON -->
+      <button id="topLoginBtn" class="login-btn">
+        Login
+      </button>
+
+      <!-- PROFILE SECTION -->
+      <div id="profileContainer">
+
+        <img id="userPhoto" src="" alt="Profile">
+
+        <button id="logoutBtn">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+    <img id="navUserPhoto" width="40" height="40" style="border-radius:50%;">
+
+    <span id="navUserName"></span>
+
+    <button id="logoutBtn">Logout</button>
+
+    </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="venues-hero">
+            <h1>Find Your Perfect Wedding Venue</h1>
+            <p>Discover and tour top-rated wedding venues to book a special place to celebrate your love. From ballrooms
+                to barns, find your perfect setting.</p>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label><i class="fas fa-search"></i> Search Venue</label>
+                    <input type="text" id="searchInput" placeholder="Search venue name...">
+                </div>
+
+                <div class="filter-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Filter by City</label>
+                    <select id="placeFilter">
+                        <option value="all">All Cities</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Venues List -->
+        <div id="venueList"></div>
+    </div>
+
+    <!-- subtle footer note - updated border color -->
+    <div
+        style="text-align: center; margin-top: 20px; padding: 20px; color: rgba(250,232,255,0.4); font-size: 0.85rem; border-top: 1px solid rgba(244,63,94,0.2); max-width: 1400px; margin-left: auto; margin-right: auto;">
+        <i class="fas fa-heart" style="color: #F43F5E;"></i> Weddings begin here – Eventora
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-box">
+            <span class="close">&times;</span>
+            <h2 id="authTitle">Welcome Back</h2>
+            <p class="subtitle" id="authSubtitle">Sign in to continue to your account</p>
+
+            <input type="text" id="name" placeholder="Full Name" style="display: none;" />
+            <input type="email" id="email" placeholder="Email Address" required />
+            <input type="password" id="password" placeholder="Password" required />
+
+            <button id="authActionBtn">Login</button>
+
+            <p id="toggleAuth">
+                Don't have an account? <span>Sign Up</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- SCRIPT SECTION -->
+    <script>
+        // ============================================
+        // NAVBAR SLIDER FUNCTIONALITY
+        // ============================================
+        const navToggle = document.getElementById('navToggle');
+        const verticalNav = document.getElementById('verticalNav');
+        const navToggleIcon = document.getElementById('navToggleIcon');
+        const navOverlay = document.getElementById('navOverlay');
+        const body = document.body;
+        const contentWrapper = document.querySelector('.content-wrapper');
+
+        navToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            verticalNav.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            body.classList.toggle('nav-open');
+            navToggleIcon.className = verticalNav.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        navOverlay.addEventListener('click', function () {
+            verticalNav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            body.classList.remove('nav-open');
+            navToggleIcon.className = 'fas fa-bars';
+        });
+
+        document.addEventListener('click', function (event) {
+            const isMobile = window.innerWidth <= 768;
+
+            if (!isMobile &&
+                verticalNav.classList.contains('active') &&
+                !verticalNav.contains(event.target) &&
+                !navToggle.contains(event.target)) {
+                verticalNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                body.classList.remove('nav-open');
+                navToggleIcon.className = 'fas fa-bars';
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && verticalNav.classList.contains('active')) {
+                verticalNav.classList.remove('active');
+                navOverlay.classList.remove('active');
+                body.classList.remove('nav-open');
+                navToggleIcon.className = 'fas fa-bars';
+            }
+        });
+
+        document.querySelectorAll('.vertical-nav-links a').forEach(link => {
+            link.addEventListener('click', function () {
+                if (window.innerWidth <= 768) {
+                    verticalNav.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    body.classList.remove('nav-open');
+                    navToggleIcon.className = 'fas fa-bars';
+                }
+            });
+        });
+
+        document.querySelectorAll('.nav-auth-btn, .nav-top-auth-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                if (window.innerWidth <= 768 && !button.classList.contains('logout')) {
+                    verticalNav.classList.remove('active');
+                    navOverlay.classList.remove('active');
+                    body.classList.remove('nav-open');
+                    navToggleIcon.className = 'fas fa-bars';
+                }
+            });
+        });
+
+        contentWrapper.addEventListener('click', function (e) {
+            if (window.innerWidth > 768 && verticalNav.classList.contains('active')) {
+                e.stopPropagation();
+            }
+        });
+    </script>
+
+    <!-- VENUES DATA AND FILTERING SCRIPT - with fixed view button -->
+    <script>
+        const venues = [
+  { 
+    name: "Royal Palace", place: "Mumbai", price: "₹2,00,000 / day",
+    desc: "Grand luxury wedding palace with ocean view.",
+    img1: "wedding-imgs/venue/v1-img1.png",
+    img2: "wedding-imgs/venue/v1-img2.png",
+    img3: "wedding-imgs/venue/v1-img3.png"
+  },
+
+  { 
+    name: "Sunset Resort", place: "Goa", price: "₹1,50,000 / day",
+    desc: "Beachside resort perfect for destination weddings.",
+    img1: "wedding-imgs/venue/v2-img1.png",
+    img2: "wedding-imgs/venue/v2-img2.png",
+    img3: "wedding-imgs/venue/v2-img3.png"
+  },
+
+  { 
+    name: "Heritage Hall", place: "Jaipur", price: "₹1,20,000 / day",
+    desc: "Classic heritage venue with Rajasthani architecture.",
+    img1: "wedding-imgs/venue/v3-img1.png",
+    img2: "wedding-imgs/venue/v3-img2.png",
+    img3: "wedding-imgs/venue/v3-img3.png"
+  },
+
+  { 
+    name: "The Green Courtyard", place: "Pune", price: "₹90,000 / day",
+    desc: "Outdoor wedding venue surrounded by lush gardens.",
+    img1: "wedding-imgs/venue/v4-img1.png",
+    img2: "wedding-imgs/venue/v4-img2.png",
+    img3: "wedding-imgs/venue/v4-img3.png"
+  },
+
+  { 
+    name: "Emerald Banquet", place: "Delhi", price: "₹1,30,000 / day",
+    desc: "Banquet hall with elegant modern interiors.",
+    img1: "wedding-imgs/venue/v5-img1.png",
+    img2: "wedding-imgs/venue/v5-img2.png",
+    img3: "wedding-imgs/venue/v5-img3.png"
+  },
+
+  { 
+    name: "Silver Sands", place: "Chennai", price: "₹1,60,000 / day",
+    desc: "Beachfront luxury resort for romantic ceremonies.",
+    img1: "wedding-imgs/venue/v6-img1.png",
+    img2: "wedding-imgs/venue/v6-img2.png",
+    img3: "wedding-imgs/venue/v6-img3.png"
+  },
+
+  { 
+    name: "Lakeview Pavilion", place: "Udaipur", price: "₹2,20,000 / day",
+    desc: "Lakeside palace for fairy-tale weddings.",
+    img1: "wedding-imgs/venue/v7-img1.png",
+    img2: "wedding-imgs/venue/v7-img2.png",
+    img3: "wedding-imgs/venue/v7-img3.png"
+  },
+
+  { 
+    name: "Royal Orchid", place: "Bangalore", price: "₹1,10,000 / day",
+    desc: "Spacious lawn with luxurious suites and catering.",
+    img1: "wedding-imgs/venue/v8-img1.png",
+    img2: "wedding-imgs/venue/v8-img2.png",
+    img3: "wedding-imgs/venue/v8-img3.png"
+  },
+
+  { 
+    name: "Hilltop Mansion", place: "Lonavala", price: "₹85,000 / day",
+    desc: "Scenic hilltop wedding venue surrounded by nature.",
+    img1: "wedding-imgs/venue/v9-img1.png",
+    img2: "wedding-imgs/venue/v9-img2.png",
+    img3: "wedding-imgs/venue/v9-img3.png"
+  },
+
+  { 
+    name: "The Golden Leaf", place: "Nagpur", price: "₹75,000 / day",
+    desc: "Modern banquet with golden interiors and lighting.",
+    img1: "wedding-imgs/venue/v10-img1.png",
+    img2: "wedding-imgs/venue/v10-img2.png",
+    img3: "wedding-imgs/venue/v10-img3.png"
+  }
+];
+        const venueList = document.getElementById("venueList");
+        const searchInput = document.getElementById("searchInput");
+        const placeFilter = document.getElementById("placeFilter");
+
+        [...new Set(venues.map(v => v.place))].sort().forEach(p => {
+            const opt = document.createElement("option");
+            opt.value = p; opt.textContent = p;
+            placeFilter.appendChild(opt);
+        });
+
+        function slugify(name) {
+            return name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+        }
+
+        function renderVenues() {
+            venueList.innerHTML = "";
+            const searchText = searchInput.value.toLowerCase();
+            const selectedPlace = placeFilter.value;
+            venues.filter(v => {
+                const matchesPlace = selectedPlace === "all" || v.place === selectedPlace;
+                const matchesName = v.name.toLowerCase().includes(searchText);
+                return matchesPlace && matchesName;
+            }).forEach(v => {
+                const slug = slugify(v.name);
+                const card = document.createElement("div");
+                card.className = "listing";
+                card.innerHTML = `
+                    <div class="hex"><img src="${v.img1}?auto=format&fit=crop&w=800&q=60"></div>
+                    <div class="right">
+                        <h3 class="venue-name">${v.name}</h3>
+                        <div class="location"><i class="fa-solid fa-location-dot"></i> ${v.place}</div>
+                        <div class="gallery">
+                            <div><img src="${v.img1}?auto=format&fit=crop&w=800&q=60"></div>
+                            <div><img src="${v.img2}?auto=format&fit=crop&w=800&q=60"></div>
+                            <div><img src="${v.img3}?auto=format&fit=crop&w=800&q=60"></div>
+                        </div>
+                        <div class="meta">
+                            <div class="price-block">${v.price}</div>
+                            <div>Capacity: 400–800 guests</div>
+                            <div>Parking: Available</div>
+                        </div>
+                        <p class="desc">${v.desc}</p>
+                        <a href="venue-details.html?venue=${slug}" class="view-btn">
+                            <i class="fa-solid fa-eye"></i> View Details
+                        </a>
+                    </div>`;
+                venueList.appendChild(card);
+            });
+        }
+
+        renderVenues();
+        searchInput.addEventListener("input", renderVenues);
+        placeFilter.addEventListener("change", renderVenues);
+    </script>
+
+    <!-- Firebase Auth Module - unchanged (already uses the same config) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8Wp7S4fg5YURaNYAA2ngzUD11VCwTaGI",
+            authDomain: "o-e-m-system.firebaseapp.com",
+            projectId: "o-e-m-system",
+            storageBucket: "o-e-m-system.appspot.com",
+            messagingSenderId: "298561567790",
+            appId: "1:298561567790:web:8a3b3fc2c4fc9801e4f3bf"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const navTopLoginBtn = document.getElementById("navTopLoginBtn");
+        const navTopSignupBtn = document.getElementById("navTopSignupBtn");
+        const navTopLogoutBtn = document.getElementById("navTopLogoutBtn");
+        const navLoginBtn = document.getElementById("navLoginBtn");
+        const navSignupBtn = document.getElementById("navSignupBtn");
+        const navLogoutBtn = document.getElementById("navLogoutBtn");
+        const navTopUserInfo = document.getElementById("navTopUserInfo");
+        const navTopUserName = document.getElementById("navTopUserName");
+        const navTopUserEmail = document.getElementById("navTopUserEmail");
+        const userInfo = document.getElementById("userInfo");
+        const userName = document.getElementById("userName");
+        const userEmailNav = document.getElementById("userEmailNav");
+        const modal = document.getElementById("authModal");
+        const closeBtn = document.querySelector(".close");
+        const authTitle = document.getElementById("authTitle");
+        const authSubtitle = document.getElementById("authSubtitle");
+        const authActionBtn = document.getElementById("authActionBtn");
+        const toggleAuth = document.getElementById("toggleAuth");
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        let isLogin = true;
+
+        function openModal(loginMode) {
+            isLogin = loginMode;
+            authTitle.innerText = loginMode ? "Welcome Back" : "Create Account";
+            authSubtitle.innerText = loginMode ? "Sign in to continue to your account" : "Join Eventora to plan your perfect day";
+            authActionBtn.innerText = loginMode ? "Login" : "Sign Up";
+            toggleAuth.innerHTML = loginMode
+                ? `Don't have an account? <span>Sign Up</span>`
+                : `Already have an account? <span>Login</span>`;
+            nameInput.style.display = loginMode ? "none" : "block";
+            emailInput.value = "";
+            passwordInput.value = "";
+            nameInput.value = "";
+            modal.style.display = "flex";
+        }
+
+        function closeNavbar() {
+            verticalNav.classList.remove('active');
+            navOverlay.classList.remove('active');
+            body.classList.remove('nav-open');
+            navToggleIcon.className = 'fas fa-bars';
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position:fixed;top:20px;right:20px;padding:15px 25px;
+                background:${type === 'success' ? '#4CAF50' : '#f44336'};
+                color:white;border-radius:10px;
+                box-shadow:0 5px 15px rgba(0,0,0,0.3);
+                z-index:3000;font-weight:500;animation:slideIn 0.3s ease;`;
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+                @keyframes slideOut { from{transform:translateX(0);opacity:1} to{transform:translateX(100%);opacity:0} }`;
+            document.head.appendChild(style);
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                notification.style.opacity = '0';
+                setTimeout(() => { if (notification.parentNode) notification.parentNode.removeChild(notification); }, 300);
+            }, 3000);
+        }
+
+        function updateUI(user) {
+            if (user) {
+                navTopUserInfo.style.display = "flex";
+                navTopLoginBtn.style.display = "none";
+                navTopSignupBtn.style.display = "none";
+                navTopLogoutBtn.style.display = "block";
+                userInfo.style.display = "flex";
+                navLoginBtn.style.display = "none";
+                navSignupBtn.style.display = "none";
+                navLogoutBtn.style.display = "block";
+            } else {
+                navTopUserInfo.style.display = "none";
+                navTopLoginBtn.style.display = "block";
+                navTopSignupBtn.style.display = "block";
+                navTopLogoutBtn.style.display = "none";
+                userInfo.style.display = "none";
+                navLoginBtn.style.display = "block";
+                navSignupBtn.style.display = "block";
+                navLogoutBtn.style.display = "none";
+            }
+        }
+
+        navTopLoginBtn.addEventListener("click", () => { closeNavbar(); openModal(true); });
+        navTopSignupBtn.addEventListener("click", () => { closeNavbar(); openModal(false); });
+        navTopLogoutBtn.addEventListener("click", () => {
+            signOut(auth).then(() => { updateUI(null); showNotification("Logged out successfully!", "success"); })
+                .catch(error => alert("Error signing out: " + error.message));
+        });
+        navLoginBtn.addEventListener("click", () => { closeNavbar(); openModal(true); });
+        navSignupBtn.addEventListener("click", () => { closeNavbar(); openModal(false); });
+        navLogoutBtn.addEventListener("click", () => {
+            signOut(auth).then(() => { updateUI(null); showNotification("Logged out successfully!", "success"); })
+                .catch(error => alert("Error signing out: " + error.message));
+        });
+        closeBtn.addEventListener("click", () => { modal.style.display = "none"; });
+        toggleAuth.addEventListener("click", (e) => { if (e.target.tagName === "SPAN") openModal(!isLogin); });
+        window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape" && modal.style.display === "flex") modal.style.display = "none"; });
+
+        authActionBtn.addEventListener("click", async () => {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const name = nameInput.value.trim();
+            if (!email || !password) { alert("Please enter email and password"); return; }
+            if (!isLogin && !name) { alert("Please enter your name"); return; }
+            try {
+                if (isLogin) {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    modal.style.display = "none";
+                    showNotification("Logged in successfully!", "success");
+                } else {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    await setDoc(doc(db, "users", userCredential.user.uid), {
+                        name: name, email: email, createdAt: new Date().toISOString(), role: "user"
+                    });
+                    modal.style.display = "none";
+                    showNotification("Account created successfully!", "success");
+                }
+            } catch (error) {
+                let errorMessage = "Authentication failed. ";
+                switch (error.code) {
+                    case "auth/email-already-in-use": errorMessage += "Email already in use. Try logging in instead."; break;
+                    case "auth/invalid-email": errorMessage += "Invalid email address."; break;
+                    case "auth/weak-password": errorMessage += "Password should be at least 6 characters."; break;
+                    case "auth/user-not-found": errorMessage += "No account found with this email."; break;
+                    case "auth/wrong-password": errorMessage += "Incorrect password."; break;
+                    default: errorMessage += error.message;
+                }
+                alert(errorMessage);
+            }
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            updateUI(user);
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        navTopUserName.textContent = userData.name || "User";
+                        navTopUserEmail.textContent = user.email;
+                        userName.textContent = userData.name || "User";
+                        userEmailNav.textContent = user.email;
+                    } else {
+                        navTopUserName.textContent = "User";
+                        navTopUserEmail.textContent = user.email;
+                        userName.textContent = "User";
+                        userEmailNav.textContent = user.email;
+                    }
+                } catch (error) {
+                    navTopUserName.textContent = "User";
+                    navTopUserEmail.textContent = user.email;
+                    userName.textContent = "User";
+                    userEmailNav.textContent = user.email;
+                }
+            } else {
+                navTopUserName.textContent = "Guest";
+                navTopUserEmail.textContent = "Not logged in";
+                userName.textContent = "Guest";
+                userEmailNav.textContent = "Not logged in";
+            }
+        });
+    </script>
+</body>
+
+</html>

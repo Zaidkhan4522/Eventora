@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- <script src="main.js" defer type="module"></script> -->
+  <title>EventAura Login</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:linear-gradient(135deg,#0f172a,#1e293b,#7c3aed);
+      overflow:hidden;
+    }
+
+    .container{
+      width:900px;
+      height:550px;
+      background:white;
+      border-radius:20px;
+      overflow:hidden;
+      display:flex;
+      box-shadow:0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    .left{
+      width:50%;
+      background:linear-gradient(135deg,#7c3aed,#9333ea,#c084fc);
+      color:white;
+      padding:50px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position:relative;
+    }
+
+    .left h1{
+      font-size:48px;
+      margin-bottom:20px;
+    }
+
+    .left p{
+      line-height:1.7;
+      font-size:17px;
+      opacity:0.9;
+    }
+
+    .right{
+      width:50%;
+      padding:40px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .form-box{
+      width:100%;
+      transition:0.5s;
+    }
+
+    .form-box h2{
+      text-align:center;
+      margin-bottom:25px;
+      color:#111827;
+      font-size:32px;
+    }
+
+    .input-box{
+      margin-bottom:18px;
+    }
+
+    .input-box input{
+      width:100%;
+      padding:14px;
+      border:none;
+      outline:none;
+      border-radius:10px;
+      background:#f1f5f9;
+      font-size:15px;
+    }
+
+    .btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:10px;
+      background:#7c3aed;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.3s;
+      margin-top:10px;
+    }
+
+    .btn:hover{
+      background:#6d28d9;
+    }
+
+    .divider{
+      text-align:center;
+      margin:20px 0;
+      color:#6b7280;
+      position:relative;
+    }
+
+    .divider::before,
+    .divider::after{
+      content:'';
+      position:absolute;
+      width:40%;
+      height:1px;
+      background:#d1d5db;
+      top:50%;
+    }
+
+    .divider::before{
+      left:0;
+    }
+
+    .divider::after{
+      right:0;
+    }
+
+    .google-btn{
+      width:100%;
+      padding:13px;
+      border:1px solid #d1d5db;
+      border-radius:10px;
+      background:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      cursor:pointer;
+      font-size:15px;
+      transition:0.3s;
+    }
+
+    .google-btn:hover{
+      background:#f9fafb;
+    }
+
+    .google-btn img{
+      width:22px;
+    }
+
+    .switch{
+      text-align:center;
+      margin-top:18px;
+      font-size:14px;
+    }
+
+    .switch span{
+      color:#7c3aed;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    #signupForm{
+      display:none;
+    }
+
+    @media(max-width:900px){
+      .container{
+        width:95%;
+        flex-direction:column;
+        height:auto;
+      }
+
+      .left,
+      .right{
+        width:100%;
+      }
+
+      .left{
+        padding:35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- LEFT SIDE -->
+    <div class="left">
+      <h1>EventAura</h1>
+      <p>
+        Join EventAura and explore amazing events,
+        concerts, weddings, esports tournaments,
+        photography events and much more.
+      </p>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+
+      <!-- LOGIN FORM -->
+      <div class="form-box" id="loginForm">
+
+        <h2>Login</h2>
+
+        <div class="input-box">
+          <input type="email" placeholder="Email Address">
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Password">
+        </div>
+
+        <button class="btn">Login</button>
+
+        <div class="divider">OR</div>
+
+        <button class="google-btn" id="googleLogin">
+          <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png">
+          Continue with Google
+        </button>
+
+        <div class="switch">
+          Don't have an account?
+          <span onclick="showSignup()">Sign Up</span>
+        </div>
+
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div class="form-box" id="signupForm">
+
+        <h2>Create Account</h2>
+
+        <div class="input-box">
+          <input type="text" placeholder="Full Name">
+        </div>
+
+        <div class="input-box">
+          <input type="email" placeholder="Email Address">
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Password">
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Confirm Password">
+        </div>
+
+        <button class="btn">Create Account</button>
+
+        <div class="divider">OR</div>
+
+        <button class="google-btn" id="googleSignup">
+          <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png">
+          Sign Up with Google
+        </button>
+
+        <div class="switch">
+          Already have an account?
+          <span onclick="showLogin()">Login</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="main.js" defer type="module"></script>
+
+</body>
+</html>

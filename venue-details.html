@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Venue Details</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@400;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #6D28D9;
+      --card: #fff;
+      --muted: #FAE8FF;
+      --primary: #F43F5E;
+      --primary-light: #F9A8D4;
+      --purple: #6D28D9;
+      --shadow: 0 10px 30px rgba(109, 40, 217, 0.2);
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, var(--purple), var(--primary));
+      color: #222;
+      margin: 0;
+      padding: 24px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      background: var(--card);
+      padding: 28px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .location {
+      text-align: center;
+      color: var(--purple);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid var(--primary-light);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.02);
+    }
+
+    p.desc {
+      line-height: 1.5;
+      color: var(--purple);
+      text-align: justify;
+      margin-bottom: 20px;
+    }
+
+    .price {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    form {
+      background: rgba(250, 232, 255, 0.9);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--primary-light);
+    }
+
+    form h2 {
+      text-align: center;
+      color: var(--primary);
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin: 10px 0 6px;
+      color: var(--purple);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--primary-light);
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(244, 63, 94, 0.3);
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .back:hover {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .notfound {
+      text-align: center;
+      color: var(--muted);
+      padding: 50px 0;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="venueContainer"></div>
+
+  <script type="module">
+    /* ===================== FIREBASE + APP SETUP ===================== */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp,
+      getDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC8Wp7S4fg5YURaNYAA2ngzUD11VCwTaGI",
+      authDomain: "o-e-m-system.firebaseapp.com",
+      projectId: "o-e-m-system",
+      storageBucket: "o-e-m-system.appspot.com",
+      messagingSenderId: "298561567790",
+      appId: "1:298561567790:web:8a3b3fc2c4fc9801e4f3bf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    /* ===================== VENUES DATA (full list) ===================== */
+   const venues = [
+  { 
+    name: "Royal Palace", place: "Mumbai", price: "₹2,00,000 / day",
+    desc: "Grand luxury wedding palace with ocean view.",
+    img1: "wedding-imgs/venue/v1-img1.png",
+    img2: "wedding-imgs/venue/v1-img2.png",
+    img3: "wedding-imgs/venue/v1-img3.png"
+  },
+
+  { 
+    name: "Sunset Resort", place: "Goa", price: "₹1,50,000 / day",
+    desc: "Beachside resort perfect for destination weddings.",
+    img1: "wedding-imgs/venue/v2-img1.png",
+    img2: "wedding-imgs/venue/v2-img2.png",
+    img3: "wedding-imgs/venue/v2-img3.png"
+  },
+
+  { 
+    name: "Heritage Hall", place: "Jaipur", price: "₹1,20,000 / day",
+    desc: "Classic heritage venue with Rajasthani architecture.",
+    img1: "wedding-imgs/venue/v3-img1.png",
+    img2: "wedding-imgs/venue/v3-img2.png",
+    img3: "wedding-imgs/venue/v3-img3.png"
+  },
+
+  { 
+    name: "The Green Courtyard", place: "Pune", price: "₹90,000 / day",
+    desc: "Outdoor wedding venue surrounded by lush gardens.",
+    img1: "wedding-imgs/venue/v4-img1.png",
+    img2: "wedding-imgs/venue/v4-img2.png",
+    img3: "wedding-imgs/venue/v4-img3.png"
+  },
+
+  { 
+    name: "Emerald Banquet", place: "Delhi", price: "₹1,30,000 / day",
+    desc: "Banquet hall with elegant modern interiors.",
+    img1: "wedding-imgs/venue/v5-img1.png",
+    img2: "wedding-imgs/venue/v5-img2.png",
+    img3: "wedding-imgs/venue/v5-img3.png"
+  },
+
+  { 
+    name: "Silver Sands", place: "Chennai", price: "₹1,60,000 / day",
+    desc: "Beachfront luxury resort for romantic ceremonies.",
+    img1: "wedding-imgs/venue/v6-img1.png",
+    img2: "wedding-imgs/venue/v6-img2.png",
+    img3: "wedding-imgs/venue/v6-img3.png"
+  },
+
+  { 
+    name: "Lakeview Pavilion", place: "Udaipur", price: "₹2,20,000 / day",
+    desc: "Lakeside palace for fairy-tale weddings.",
+    img1: "wedding-imgs/venue/v7-img1.png",
+    img2: "wedding-imgs/venue/v7-img2.png",
+    img3: "wedding-imgs/venue/v7-img3.png"
+  },
+
+  { 
+    name: "Royal Orchid", place: "Bangalore", price: "₹1,10,000 / day",
+    desc: "Spacious lawn with luxurious suites and catering.",
+    img1: "wedding-imgs/venue/v8-img1.png",
+    img2: "wedding-imgs/venue/v8-img2.png",
+    img3: "wedding-imgs/venue/v8-img3.png"
+  },
+
+  { 
+    name: "Hilltop Mansion", place: "Lonavala", price: "₹85,000 / day",
+    desc: "Scenic hilltop wedding venue surrounded by nature.",
+    img1: "wedding-imgs/venue/v9-img1.png",
+    img2: "wedding-imgs/venue/v9-img2.png",
+    img3: "wedding-imgs/venue/v9-img3.png"
+  },
+
+  { 
+    name: "The Golden Leaf", place: "Nagpur", price: "₹75,000 / day",
+    desc: "Modern banquet with golden interiors and lighting.",
+    img1: "wedding-imgs/venue/v10-img1.png",
+    img2: "wedding-imgs/venue/v10-img2.png",
+    img3: "wedding-imgs/venue/v10-img3.png"
+  }
+];
+
+    /* ===================== HELPERS & ROUTING ===================== */
+    function slugify(name) {
+      return name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("venue");
+    const venue = venues.find(v => slugify(v.name) === slug);
+    const container = document.getElementById("venueContainer");
+
+    /* ===================== AUTH STATE - PREFILL ===================== */
+    let currentUser = null;
+    let currentUserData = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      if (currentUser) {
+        try {
+          const userDocRef = doc(db, "users", currentUser.uid);
+          const userSnap = await getDoc(userDocRef);
+          if (userSnap.exists()) {
+            currentUserData = userSnap.data();
+            // If form exists, prefill name/email
+            const nameEl = document.getElementById("name");
+            const emailEl = document.getElementById("email");
+            if (nameEl && currentUserData.name) nameEl.value = currentUserData.name;
+            if (emailEl && currentUserData.email) emailEl.value = currentUserData.email;
+          }
+        } catch (err) {
+          console.error("Error fetching user doc:", err);
+        }
+      }
+    });
+
+    /* ===================== RENDER PAGE / FORM ===================== */
+    if (!container) {
+      console.error("No element with id 'venueContainer' found.");
+    } else if (!venue) {
+      container.innerHTML = `<div class="notfound">Venue not found</div>`;
+    } else {
+      container.innerHTML = `
+    <h1>${escapeHtml(venue.name)}</h1>
+    <div class="location">${escapeHtml(venue.place)}</div>
+    <div class="gallery">
+      <img src="${venue.img1}?auto=format&fit=crop&w=800&q=60" alt="${escapeHtml(venue.name)} image 1">
+      <img src="${venue.img2}?auto=format&fit=crop&w=800&q=60" alt="${escapeHtml(venue.name)} image 2">
+      <img src="${venue.img3}?auto=format&fit=crop&w=800&q=60" alt="${escapeHtml(venue.name)} image 3">
+    </div>
+    <p class="desc">${escapeHtml(venue.desc)}</p>
+    <div class="price">Price: ${escapeHtml(venue.price)}</div>
+    <form id="bookForm">
+      <h2>Book This Venue</h2>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required>
+      <label for="date">Preferred Date</label>
+      <input type="date" id="date" required>
+      <label for="guests">Number of Guests</label>
+      <input type="number" id="guests" min="50" max="2000" required>
+      <label for="message">Additional Notes</label>
+      <textarea id="message" rows="3" placeholder="Any special requests..."></textarea>
+      <button type="submit">Submit Booking Request</button>
+    </form>
+    <a href="venues.html" class="back">← Back to Venues</a>
+  `;
+
+      // If user data already fetched before render, prefill name/email
+      if (currentUserData) {
+        const nameEl = document.getElementById("name");
+        const emailEl = document.getElementById("email");
+        if (nameEl && currentUserData.name) nameEl.value = currentUserData.name;
+        if (emailEl && currentUserData.email) emailEl.value = currentUserData.email;
+      }
+
+      /* ===================== SINGLE SUBMIT HANDLER (NO DUPLICATES) ===================== */
+      const form = document.getElementById("bookForm");
+      if (!form) {
+        console.error("bookForm not found after rendering.");
+      } else {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const submitBtn = form.querySelector("button[type='submit']");
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Submitting...";
+          }
+
+          // Gather values
+          const fullName = (document.getElementById("name")?.value || "").trim();
+          const email = (document.getElementById("email")?.value || "").trim();
+          const phone = (document.getElementById("phone")?.value || "").trim();
+          const preferredDate = document.getElementById("date")?.value || "";
+          const guests = document.getElementById("guests")?.value || "";
+          const message = (document.getElementById("message")?.value || "").trim();
+
+          // Basic client-side validation (the form has required attributes, this is defensive)
+          if (!fullName || !email || !phone || !preferredDate || !guests) {
+            alert("Please fill in all required fields.");
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit Booking Request";
+            }
+            return;
+          }
+
+          const bookingData = {
+            venueName: venue.name,
+            venuePlace: venue.place,
+            fullName,
+            email,
+            phone,
+            preferredDate,
+            guests: Number(guests),
+            message,
+            userId: currentUser ? currentUser.uid : "guest",
+            createdAt: serverTimestamp()
+          };
+
+          try {
+            await addDoc(collection(db, "venueBookings"), bookingData);
+            alert("🎉 Booking request submitted successfully!");
+            form.reset();
+
+            // Refill name/email for logged in user after reset
+            if (currentUserData) {
+              const nameEl = document.getElementById("name");
+              const emailEl = document.getElementById("email");
+              if (nameEl && currentUserData.name) nameEl.value = currentUserData.name;
+              if (emailEl && currentUserData.email) emailEl.value = currentUserData.email;
+            }
+          } catch (err) {
+            console.error("Error saving booking:", err);
+            alert("❌ Error submitting booking. Please try again.");
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit Booking Request";
+            }
+          }
+        });
+      }
+    }
+
+    /* ===================== SMALL UTILITIES ===================== */
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+
+
+</body>
+
+</html>

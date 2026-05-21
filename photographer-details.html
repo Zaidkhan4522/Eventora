@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photographer Details</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@400;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #F43F5E;
+      --primary-light: #F9A8D4;
+      --purple: #6D28D9;
+      --purple-light: #8B5CF6;
+      --bg: #FAE8FF;
+      --card: #ffffff;
+      --muted: #6B7280;
+      --shadow: 0 10px 30px rgba(109, 40, 217, 0.2);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, var(--purple), var(--primary));
+      color: #222;
+      padding: 26px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: white;
+      text-align: center;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(109, 40, 217, 0.3);
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: rgba(250, 232, 255, 0.9);
+      margin-bottom: 30px;
+    }
+
+    .photographer-detail {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .photographer-header {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .hex {
+      width: 150px;
+      height: 150px;
+      clip-path: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+      overflow: hidden;
+      background: rgba(244, 63, 94, 0.2);
+      border: 2px solid var(--primary-light);
+      transition: transform 0.3s ease;
+    }
+
+    .hex:hover {
+      transform: rotate(3deg) scale(1.02);
+      border-color: var(--primary);
+    }
+
+    .hex img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .right {
+      flex: 1;
+    }
+
+    .photographer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      margin: 0 0 5px;
+      color: var(--primary);
+    }
+
+    .location {
+      color: var(--purple);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .meta {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      background: rgba(244, 63, 94, 0.1);
+      padding: 10px 15px;
+      border-radius: 40px;
+    }
+
+    .price-block {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .gallery {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .gallery div {
+      flex: 1 1 calc(33.333% - 10px);
+      height: 180px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--primary-light);
+      transition: all 0.3s ease;
+    }
+
+    .gallery div:hover {
+      border-color: var(--primary);
+      transform: scale(1.02);
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .booking-form {
+      background: var(--card);
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 30px;
+    }
+
+    .booking-form h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .booking-form input,
+    .booking-form textarea {
+      width: 100%;
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      border-radius: 50px;
+      border: 1px solid var(--primary-light);
+      font-size: 14px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .booking-form input:focus,
+    .booking-form textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.2);
+    }
+
+    .booking-form button {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      padding: 14px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3);
+    }
+
+    .booking-form button:hover {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(244, 63, 94, 0.4);
+    }
+
+    .booking-form button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    @media (max-width: 600px) {
+      .photographer-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hex {
+        width: 120px;
+        height: 120px;
+      }
+
+      .gallery div {
+        flex: 1 1 100%;
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Photographer Details</h1>
+    <p class="subtitle">Check portfolio & book your photographer</p>
+
+    <div id="photographerDetail" class="photographer-detail"></div>
+
+    <div class="booking-form">
+      <h3>Book This Photographer</h3>
+      <form id="bookForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <input type="tel" id="phone" placeholder="Your Phone" required>
+        <input type="date" id="date" required>
+        <textarea id="notes" placeholder="Additional Notes" rows="4"></textarea>
+        <button type="submit">Submit Booking Request</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    /* ================= FIREBASE ================= */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp,
+      doc,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC8Wp7S4fg5YURaNYAA2ngzUD11VCwTaGI",
+      authDomain: "o-e-m-system.firebaseapp.com",
+      projectId: "o-e-m-system",
+      storageBucket: "o-e-m-system.appspot.com",
+      messagingSenderId: "298561567790",
+      appId: "1:298561567790:web:8a3b3fc2c4fc9801e4f3bf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    /* ================= PHOTOGRAPHERS DATA ================= */
+const photographers = [
+  { 
+    name: "Rohit Sharma", place: "Mumbai", price: "₹50,000 / wedding",
+    desc: "Candid and traditional wedding photography.",
+    img1: "wedding-imgs/photographers/p1-img1.png",
+    img2: "wedding-imgs/photographers/p1-img2.png",
+    img3: "wedding-imgs/photographers/p1-img3.png"
+  },
+
+  { 
+    name: "Anita Desai", place: "Goa", price: "₹45,000 / wedding",
+    desc: "Beach weddings with vibrant and candid shots.",
+    img1: "wedding-imgs/photographers/p2-img1.png",
+    img2: "wedding-imgs/photographers/p2-img2.png",
+    img3: "wedding-imgs/photographers/p2-img3.png"
+  },
+
+  { 
+    name: "Vikram Singh", place: "Jaipur", price: "₹60,000 / wedding",
+    desc: "Heritage and royal wedding photography.",
+    img1: "wedding-imgs/photographers/p3-img1.png",
+    img2: "wedding-imgs/photographers/p3-img2.png",
+    img3: "wedding-imgs/photographers/p3-img3.png"
+  },
+
+  { 
+    name: "Meera Kapoor", place: "Pune", price: "₹40,000 / wedding",
+    desc: "Garden and outdoor wedding photography.",
+    img1: "wedding-imgs/photographers/p4-img1.png",
+    img2: "wedding-imgs/photographers/p4-img2.png",
+    img3: "wedding-imgs/photographers/p4-img3.png"
+  },
+
+  { 
+    name: "Arjun Verma", place: "Delhi", price: "₹55,000 / wedding",
+    desc: "Elegant indoor and banquet wedding photography.",
+    img1: "wedding-imgs/photographers/p5-img1.png",
+    img2: "wedding-imgs/photographers/p5-img2.png",
+    img3: "wedding-imgs/photographers/p5-img3.png"
+  },
+
+  { 
+    name: "Sana Khan", place: "Bangalore", price: "₹52,000 / wedding",
+    desc: "Luxury wedding photography with modern aesthetics.",
+    img1: "wedding-imgs/photographers/p6-img1.png",
+    img2: "wedding-imgs/photographers/p6-img2.png",
+    img3: "wedding-imgs/photographers/p6-img3.png"
+  },
+
+  { 
+    name: "Rahul Mehta", place: "Chennai", price: "₹48,000 / wedding",
+    desc: "Beach and coastal wedding photography.",
+    img1: "wedding-imgs/photographers/p7-img1.png",
+    img2: "wedding-imgs/photographers/p7-img2.png",
+    img3: "wedding-imgs/photographers/p7-img3.png"
+  },
+
+  { 
+    name: "Priya Sharma", place: "Kolkata", price: "₹50,000 / wedding",
+    desc: "Indoor and traditional wedding photography.",
+    img1: "wedding-imgs/photographers/p8-img1.png",
+    img2: "wedding-imgs/photographers/p8-img2.png",
+    img3: "wedding-imgs/photographers/p8-img3.png"
+  },
+
+  { 
+    name: "Aditya Reddy", place: "Hyderabad", price: "₹53,000 / wedding",
+    desc: "Palace and heritage wedding photography.",
+    img1: "wedding-imgs/photographers/p9-img1.png",
+    img2: "wedding-imgs/photographers/p9-img2.png",
+    img3: "wedding-imgs/photographers/p9-img3.png"
+  },
+
+  { 
+    name: "Neha Gupta", place: "Ahmedabad", price: "₹42,000 / wedding",
+    desc: "Open garden and luxury photography.",
+    img1: "wedding-imgs/photographers/p10-img1.png",
+    img2: "wedding-imgs/photographers/p10-img2.png",
+    img3: "wedding-imgs/photographers/p10-img3.png"
+  }
+];
+
+    /* ================= HELPERS ================= */
+    function slugify(name) {
+      return name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("photographer");
+    const photographer = photographers.find(p => slugify(p.name) === slug);
+    const container = document.getElementById("photographerDetail");
+
+    /* ================= AUTH ================= */
+    let currentUser = null;
+    let currentUserData = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      currentUser = user;
+      if (user) {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          currentUserData = snap.data();
+          const nameEl = document.getElementById("name");
+          const emailEl = document.getElementById("email");
+          if (nameEl) nameEl.value = currentUserData.name || "";
+          if (emailEl) emailEl.value = currentUserData.email || "";
+        }
+      }
+    });
+
+    /* ================= RENDER ================= */
+    if (photographer) {
+      container.innerHTML = `
+    <div class="photographer-header">
+      <div class="hex"><img src="${photographer.img1}" alt="${photographer.name}"></div>
+      <div class="right">
+        <h2 class="photographer-name">${photographer.name}</h2>
+        <div class="location"><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 6px;"></i>${photographer.place}</div>
+        <div class="meta">
+          <div class="price-block"><i class="fas fa-tag" style="margin-right: 6px;"></i> ${photographer.price}</div>
+          <div><i class="fas fa-calendar-alt" style="color: var(--primary); margin-right: 6px;"></i> Experience: 5+ years</div>
+        </div>
+        <p class="desc">${photographer.desc}</p>
+      </div>
+    </div>
+    <div class="gallery">
+      <div><img src="${photographer.img1}" alt="portfolio 1"></div>
+      <div><img src="${photographer.img2}" alt="portfolio 2"></div>
+      <div><img src="${photographer.img3}" alt="portfolio 3"></div>
+    </div>
+  `;
+    } else {
+      container.innerHTML = "<p style='text-align: center; color: white;'>Photographer not found</p>";
+    }
+
+    /* ================= SUBMIT ================= */
+    document.getElementById("bookForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const btn = e.target.querySelector("button");
+      btn.disabled = true;
+      btn.textContent = "Submitting...";
+
+      const bookingData = {
+        photographerName: photographer?.name || "Unknown",
+        photographerPlace: photographer?.place || "",
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        eventDate: document.getElementById("date").value,
+        notes: document.getElementById("notes").value.trim(),
+        userId: currentUser ? currentUser.uid : "guest",
+        createdAt: serverTimestamp()
+      };
+
+      try {
+        await addDoc(collection(db, "photographerBookings"), bookingData);
+        alert("🎉 Photographer booking request submitted successfully!");
+        e.target.reset();
+
+        if (currentUserData) {
+          document.getElementById("name").value = currentUserData.name || "";
+          document.getElementById("email").value = currentUserData.email || "";
+        }
+
+        // Set default date to 30 days from now
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 30);
+        document.getElementById("date").value = futureDate.toISOString().split('T')[0];
+      } catch (err) {
+        alert("❌ Error submitting booking. Please try again.");
+        console.error(err);
+      }
+
+      btn.disabled = false;
+      btn.textContent = "Submit Booking Request";
+    });
+
+    // Set default date to 30 days from now
+    const dateInput = document.getElementById("date");
+    if (dateInput) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      dateInput.min = today.toISOString().split('T')[0];
+
+      const futureDate = new Date();
+      futureDate.setDate(futureDate.getDate() + 30);
+      dateInput.value = futureDate.toISOString().split('T')[0];
+    }
+  </script>
+</body>
+
+</html>
